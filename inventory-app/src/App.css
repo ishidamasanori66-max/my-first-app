@@ -1,0 +1,179 @@
+/* App.css */
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 60px;
+}
+
+.main-card {
+  background-color: #ffffff;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.input-name {
+  flex: 2;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.input-quantity {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.add-button {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.add-button:hover {
+  background-color: #059669;
+}
+
+.list-section h2 {
+  font-size: 1.1rem;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* --- ここから下が変更箇所（リスト部分） --- */
+
+.inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  gap: 10px; /* 要素同士がくっつきすぎないように隙間をあける */
+}
+
+.inventory-item:last-child {
+  border-bottom: none;
+}
+
+/* 商品名は左寄せで、余ったスペースを埋める */
+.item-name {
+  font-size: 1.1rem;
+  color: #1f2937;
+  flex-grow: 1; 
+  font-weight: bold;
+}
+
+/* ＋ーボタンと個数のエリア */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* ボタンと数字の隙間 */
+  background-color: #f9fafb;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.item-quantity {
+  font-weight: bold;
+  min-width: 40px; /* 数字が1桁でも2桁でもガタガタしないように幅を確保 */
+  text-align: center;
+}
+
+/* 小さな操作ボタン */
+.qty-btn {
+  background-color: #e5e7eb;
+  border: none;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:hover {
+  background-color: #d1d5db;
+}
+
+.delete-button {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px; /* 少し小さめに調整 */
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.delete-button:hover {
+  background-color: #dc2626;
+}
+
+/* 合計数の表示エリア */
+.summary-card {
+  background-color: #e0f2fe; /* 薄い青色 */
+  color: #0369a1;            /* 濃い青文字 */
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+}
+
+.summary-count {
+  font-size: 1.4rem; /* 数字を少し大きく */
+}

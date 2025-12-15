@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在庫管理アプリ</title>
+    <style>
+        /* 全体の設定 */
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            max-width: 600px; /* スマホっぽく幅を制限 */
+            margin: 0 auto;   /* 画面中央に寄せる */
+            padding: 20px;
+            background-color: #f4f4f9; /* 薄いグレーの背景 */
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        /* 入力エリア（白いカード風） */
+        .input-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px; /* 入力欄同士の隙間 */
+            margin-bottom: 30px;
+        }
+        input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            outline: none;
+        }
+        #itemName { flex: 2; } /* 名前欄を少し広く */
+        #itemQty { flex: 1; }  /* 個数欄は狭く */
+
+        /* 追加ボタン */
+        #addBtn {
+            padding: 10px 20px;
+            background-color: #4CAF50; /* おしゃれな緑 */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #addBtn:hover { background-color: #45a049; }
+
+        /* リストエリア */
+        h3 { margin-bottom: 10px; border-bottom: 2px solid #ddd; padding-bottom: 5px; }
+        ul { list-style: none; padding: 0; }
+        
+        /* リストの各行 */
+        li {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between; /* 文字と削除ボタンを左右に配置 */
+            align-items: center;
+            font-size: 18px;
+        }
+        /* リストの角を丸くする小技 */
+        li:first-child { border-top-left-radius: 8px; border-top-right-radius: 8px; }
+        li:last-child { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; border-bottom: none; }
+
+        /* 削除ボタン（JSで作られるボタンをここからデザイン） */
+        li button {
+            background-color: #ff5252; /* 赤 */
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        li button:hover { background-color: #ff1744; }
+
+        /* スマホ用調整 */
+        @media (max-width: 480px) {
+            .input-card { flex-direction: column; } /* スマホなら縦並びに */
+        }
+    </style>
+</head>
+<body>
+    <h1>📦 在庫管理アプリ</h1>
+    
+    <div class="input-card">
+        <input type="text" id="itemName" placeholder="商品名">
+        <input type="number" id="itemQty" placeholder="数" value="1">
+        <button id="addBtn">追加</button>
+    </div>
+
+    <h3>現在の在庫リスト</h3>
+    <ul id="inventoryList">
+        </ul>
+
+    <script src="script.js"></script>
+</body>
+</html>
