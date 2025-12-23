@@ -1,0 +1,5 @@
+{
+  "name": "Inventory App Container",
+  // 起動した後に自動で実行するコマンド
+  "postCreateCommand": "cd inventory-app && npm install"
+}
