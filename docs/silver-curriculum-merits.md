@@ -59,8 +59,8 @@
 |---|---|---|---|
 | ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 + SQL習得 |
 | **シルバー** | **React + Supabase + Codespaces + Claude Code** | **組織の業務プロセス** | **業務アプリを自作** |
-| ゴールド | + Edge Functions + 外部API連携 | 複数システム | システム統合 |
-| プラチナ | Python + LangChain + Claude API + pgvector | 判断・対応業務 | AI自律化 |
+| ゴールド | + Edge Functions + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
+| プラチナ | + Stripe + Twilio/SendGrid + LIFF + Capacitor + AI | 顧客接点・顧客体験 | 顧客体験の強化 |
 
 ---
 
