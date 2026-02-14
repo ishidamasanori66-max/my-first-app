@@ -61,6 +61,7 @@
 | **シルバー** | **React + Supabase + Codespaces + Claude Code** | **組織の業務プロセス** | **業務アプリを自作** |
 | ゴールド | + Edge Functions + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
 | プラチナ | + Stripe + Twilio/SendGrid + LIFF + Capacitor + AI | 顧客接点・顧客体験 | 顧客体験の強化 |
+| ダイヤモンド | + scikit-learn + Prophet + Streamlit | 事業価値の創出 | データ駆動経営 |
 
 ---
 
