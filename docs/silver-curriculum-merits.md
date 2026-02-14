@@ -15,7 +15,7 @@
 ・データ収集からデジタル化（Excelを送る業務をなくす）
 ・Webアプリで業務フロー全体を改善
 ・リアルタイムでの情報共有・可視化
-・ブロンズで習得したSQLスキルをそのまま活用
+・ブロンズで習得したPython + SQLスキルをそのまま活用
 ```
 
 ---
@@ -43,7 +43,7 @@
 【シルバー】組織の業務プロセス改善
 ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
 │  入力フォーム  │ ──→ │  データベース  │ ──→ │ 分析・可視化  │
-│  （Web）     │      │  （Supabase） │      │ ダッシュボード │
+│  （Django）   │      │  （Supabase） │      │ ダッシュボード │
 └─────────────┘      └─────────────┘      └─────────────┘
     ↑                     ↑                     ↑
   Web化              Excel脱却              リアルタイム
@@ -58,14 +58,31 @@
 | ステージ | 技術スタック | 改善対象 | ゴール |
 |---|---|---|---|
 | ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 + SQL習得 |
-| **シルバー** | **React + Supabase + Codespaces + Claude Code** | **組織の業務プロセス** | **業務アプリを自作** |
-| ゴールド | + Edge Functions + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
-| プラチナ | + Stripe + Twilio/SendGrid + LIFF + Capacitor + AI | 顧客接点・顧客体験 | 顧客体験の強化 |
+| **シルバー** | **Django + HTMX + Supabase + Copilot** | **組織の業務プロセス** | **業務アプリを自作** |
+| ゴールド | + 外部API連携 + Celery + PWA | 社内システム全体 | システム統合と自動化 |
+| プラチナ | + Stripe + LINE + PWA + AI | 顧客接点・顧客体験 | 顧客体験の強化 |
 | ダイヤモンド | + scikit-learn + Prophet + Streamlit | 事業価値の創出 | データ駆動経営 |
 
 ---
 
 ## ブロンズからの接続
+
+### 言語の継続性（最大のメリット）
+
+```
+【ブロンズ】
+・Python を使って Excel を自動処理
+・sqlite3 で SQL の基礎を習得
+
+    ↓ 言語が同じまま！
+
+【シルバー】
+・Python（Django）を使って Web アプリ開発
+・Supabase（PostgreSQL）で同じ SQL を活用
+
+→ 新しい言語を学ばなくてよい
+→ ブロンズの知識が100%活きる
+```
 
 ### SQLスキルの継続活用
 
@@ -76,25 +93,33 @@ FROM sales
 WHERE 日付 >= '2024-01-01'
 GROUP BY 店舗名
 
-【シルバー】Supabase（PostgreSQL）で活用
-SELECT 店舗名, SUM(売上) as 合計
-FROM sales
-WHERE 日付 >= '2024-01-01'
-GROUP BY 店舗名
+【シルバー】Django ORM + Supabase（PostgreSQL）
+# SQLライクに書ける
+Sales.objects.filter(日付__gte='2024-01-01') \
+    .values('店舗名') \
+    .annotate(合計=Sum('売上'))
 
-→ まったく同じSQL！
-→ ブロンズの知識がそのまま使える
+# 生SQLも使える（慣れた書き方で）
+Sales.objects.raw('''
+    SELECT 店舗名, SUM(売上) as 合計
+    FROM sales
+    WHERE 日付 >= '2024-01-01'
+    GROUP BY 店舗名
+''')
+
+→ ブロンズで学んだSQLがそのまま使える！
 ```
 
 ### ブロンズ修了者の強み
 
 ```
-・SQLの基本構文を理解している
-・テーブル思考（行と列）が身についている
-・AIに質問しながら問題解決できる
-・Pythonの基礎知識がある
+・Pythonの基礎知識がある → Djangoはすべて Python
+・SQLの基本構文を理解している → Django ORM/生SQL で活用
+・テーブル思考（行と列）が身についている → モデル設計に直結
+・AIに質問しながら問題解決できる → GitHub Copilotで継続
 
 → シルバーでの学習負荷が大幅に軽減
+→ 他言語スタック（React等）と比較して圧倒的に有利
 ```
 
 ---
@@ -104,28 +129,110 @@ GROUP BY 店舗名
 ### 確定構成
 
 ```
-React (Vite) + Supabase + GitHub Codespaces + Claude Code
+Django + HTMX + Supabase + GitHub Codespaces + GitHub Copilot
 ```
 
 ### 各技術の役割
 
 | 技術 | 役割 | 備考 |
 |---|---|---|
-| **React (Vite)** | フロントエンド（UI） | Webアプリの画面 |
-| **Supabase** | バックエンド | DB + 認証 + ストレージ |
+| **Django** | Webフレームワーク | Python製、フルスタック |
+| **HTMX** | 動的UI | JSを書かずにAjax/動的更新 |
+| **Supabase** | マネージドPostgreSQL | データベース |
 | **GitHub Codespaces** | 開発環境 | ブラウザで完結 |
-| **Claude Code** | AI伴走 | 対話しながら開発 |
+| **GitHub Copilot** | AI伴走 | インライン補完 + チャット |
+
+### Django + HTMX の威力
+
+```
+【従来のWebアプリ開発】
+  フロントエンド: JavaScript（React, Vue等）
+  バックエンド: Python or Node.js
+  → 2つの言語を学ぶ必要
+
+【Django + HTMX】
+  フロントエンド: Django テンプレート + HTMX（HTML属性）
+  バックエンド: Django（Python）
+  → Python だけで完結！
+```
+
+### HTMXとは
+
+```html
+<!-- 従来のJavaScript -->
+<button onclick="fetchData()">取得</button>
+<script>
+async function fetchData() {
+  const res = await fetch('/api/data');
+  const html = await res.text();
+  document.getElementById('result').innerHTML = html;
+}
+</script>
+
+<!-- HTMX（JavaScriptを書かない）-->
+<button hx-get="/api/data" hx-target="#result">取得</button>
+
+→ HTML属性だけで動的処理が書ける
+→ JavaScriptの学習が不要
+```
 
 ### Webアプリで実現できること
 
 | 機能 | 説明 |
 |---|---|
-| データ入力 | Webフォームから直接入力 |
+| データ入力 | Djangoフォームから直接入力 |
 | データ表示 | 一覧表示、検索、フィルタ |
-| データ分析 | SQLで集計・抽出 |
-| データ可視化 | グラフ・ダッシュボード |
+| データ分析 | Django ORM / 生SQL で集計・抽出 |
+| データ可視化 | Chart.js等でグラフ・ダッシュボード |
 | 印刷・出力 | ブラウザ印刷、PDF生成 |
-| 認証・権限 | ログイン、ロール管理 |
+| 認証・権限 | Django標準の認証システム |
+| 管理画面 | Django Admin（自動生成） |
+
+---
+
+## Django Admin の威力
+
+### 管理画面が自動生成される
+
+```python
+# models.py
+class Order(models.Model):
+    顧客名 = models.CharField(max_length=100)
+    商品 = models.CharField(max_length=200)
+    数量 = models.IntegerField()
+    金額 = models.IntegerField()
+    作成日 = models.DateTimeField(auto_now_add=True)
+
+# admin.py
+from django.contrib import admin
+from .models import Order
+
+admin.site.register(Order)
+
+# これだけで管理画面が完成！
+# /admin にアクセスすると:
+# - 注文一覧の表示
+# - 検索・フィルタ
+# - 新規追加・編集・削除
+# - すべて自動生成
+```
+
+### React版との比較
+
+```
+【React + Supabase】
+  管理画面 → 自分で作る必要あり
+  認証機能 → Supabase Authを設定
+  CRUD画面 → すべて自分で実装
+
+【Django + HTMX】
+  管理画面 → Admin で自動生成
+  認証機能 → Django 標準で組み込み済み
+  CRUD画面 → 基本は Admin で OK
+
+→ 開発工数が大幅に削減
+→ 非エンジニアでも管理画面がすぐ使える
+```
 
 ---
 
@@ -134,18 +241,46 @@ React (Vite) + Supabase + GitHub Codespaces + Claude Code
 ### 技術構成
 
 ```
-Supabase（SQL）でデータ取得
+Django ORM（Python）でデータ取得
     ↓
-React + グラフライブラリで表示
+Django テンプレートに渡す
+    ↓
+Chart.js でグラフ表示
 ```
 
-### 推奨ライブラリ
+### 実装例
 
-| ライブラリ | 特徴 | 評価 |
-|---|---|---|
-| **Recharts** | React向け、シンプル、学習コスト低 | ◎ 推奨 |
-| Chart.js | 定番、情報豊富 | ○ |
-| ApexCharts | 見た目が良い | ○ |
+```python
+# views.py
+def dashboard(request):
+    # Django ORM で集計（ブロンズのSQLスキルが活きる）
+    売上データ = Sales.objects.values('月') \
+        .annotate(合計=Sum('金額')) \
+        .order_by('月')
+
+    return render(request, 'dashboard.html', {
+        'labels': [d['月'] for d in 売上データ],
+        'values': [d['合計'] for d in 売上データ],
+    })
+```
+
+```html
+<!-- dashboard.html -->
+<canvas id="salesChart"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('salesChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+            label: '月別売上',
+            data: {{ values|safe }}
+        }]
+    }
+});
+</script>
+```
 
 ### 作れるグラフ・ダッシュボード
 
@@ -157,16 +292,6 @@ React + グラフライブラリで表示
 ・KPI表示（数値カード）
 ```
 
-### ブロンズとの違い
-
-| 観点 | ブロンズ（Colab） | シルバー（Webアプリ） |
-|---|---|---|
-| 実行 | 手動（Colabを開いて実行） | 自動（アクセスすれば見える） |
-| 共有 | ファイル出力して送付 | URLを共有するだけ |
-| 更新 | 再実行が必要 | リアルタイム反映 |
-| 閲覧環境 | PCのみ | スマホでもOK |
-| 利用者 | 作った本人 | 誰でも |
-
 ---
 
 ## 印刷機能
@@ -177,40 +302,23 @@ React + グラフライブラリで表示
 |---|---|---|
 | ブラウザ印刷 | ◎ 簡単 | レポート、一覧表 |
 | 印刷用CSS | ○ 中程度 | 整形された帳票 |
-| PDF生成 | ○ 中程度 | 請求書、納品書 |
+| WeasyPrint | ○ 中程度 | 請求書PDF生成（Python製） |
 
 ### 技術詳細
 
-```javascript
-// ブラウザ印刷（最もシンプル）
-const handlePrint = () => {
-  window.print();
-};
+```python
+# views.py - ブラウザ印刷用のビュー
+def print_report(request):
+    orders = Order.objects.filter(日付=today)
+    return render(request, 'print_report.html', {'orders': orders})
 ```
 
 ```css
 /* 印刷用CSS */
 @media print {
-  .navbar { display: none; }  /* ナビを非表示 */
+  .navbar { display: none; }
   .no-print { display: none; }
 }
-```
-
-### プリンターとの接続
-
-```
-・メーカー配布のプリンタードライバーがあればOK
-・特別なソフトや設定は不要
-・ExcelやWordを印刷するのと同じ感覚
-
-【対応範囲】
-・一般的なA4プリンター → OK
-・インクジェット、レーザー → OK
-・複合機 → OK
-
-【ゴールド以降で対応】
-・レシートプリンター（POS）
-・ラベルプリンター
 ```
 
 ---
@@ -236,7 +344,7 @@ After:  訪問先でスマホ入力 → 自動で週報・ダッシュボード�
 
 | 課題 | シルバーで解決 |
 |---|---|
-| 申請書が紙 or Excel添付 | Webフォームで申請→自動集計 |
+| 申請書が紙 or Excel添付 | Djangoフォームで申請→自動集計 |
 | 承認待ちの確認が面倒 | ステータス管理 + 通知 |
 | 月末にデータが届かない | リアルタイムで蓄積済み |
 
@@ -333,9 +441,10 @@ After:
 ・CSV/PDF出力
 
 【技術構成】
-・React: 入力フォーム、ダッシュボード画面
-・Supabase: データ保存、認証
-・Recharts: グラフ表示
+・Django: 入力フォーム、ビュー、認証
+・HTMX: 動的なデータ更新
+・Django Admin: 管理画面
+・Chart.js: グラフ表示
 ・印刷用CSS: レポート出力
 ```
 
@@ -343,60 +452,90 @@ After:
 
 ## 技術選定の根拠
 
-### 1. Supabase を選択した理由
+### 1. Django + HTMX を選択した理由
 
 | 比較対象 | 選択理由 |
 |---|---|
-| Firebase | NoSQLはAI伴走・保守性でSQLに劣る |
+| React | JavaScript習得が必要、学習コスト高 |
+| Vue.js | 同上 |
+| Flask | Django ほど「バッテリー同梱」でない |
+
+**Django + HTMX の優位性:**
+- **ブロンズと同じ Python** で学習負荷を最小化
+- Django Admin で管理画面が自動生成
+- 認証・CSRF・XSS対策が組み込み済み
+- HTMX で JavaScript なしに動的UI
+- AI（Copilot）との相性が良い
+
+### 2. Supabase を選択した理由
+
+| 比較対象 | 選択理由 |
+|---|---|
+| Firebase | NoSQLはSQL継続性がない |
 | 自前サーバー | 運用負担が大きすぎる |
-| AWS RDS | 設定が複雑、中小企業には過剰 |
+| SQLite | 本番運用には不向き |
 
 **Supabaseの優位性:**
-- SQL（PostgreSQL）ベースでAIが扱いやすい
-- **ブロンズで習得したSQLがそのまま使える**
-- 認証・ストレージ・ホスティングが統合
-- Edge Functionsでサーバー処理も可能
-- サーバー管理不要（マネージド）
+- SQL（PostgreSQL）ベースで **ブロンズのSQL がそのまま使える**
+- マネージドで運用負担なし
 - 無料枠で学習・小規模運用に十分
+- Django ORM から直接接続可能
 
-### 2. Codespaces を選択した理由
-
-| 比較対象 | 選択理由 |
-|---|---|
-| ローカル開発 | 環境構築の壁、属人化リスク |
-| Cursor | ローカルインストール必要 |
-| Replit | AI機能がClaude Codeほど強力でない |
-
-**Codespacesの優位性:**
-- ブラウザだけで完結
-- ローカルPCにコードを置かない
-- 環境構築不要
-- どこからでもアクセス可能
-
-### 3. Claude Code を選択した理由
+### 3. GitHub Copilot を選択した理由
 
 | 比較対象 | 選択理由 |
 |---|---|
-| ChatGPT | ファイル直接編集不可 |
-| Gemini | ファイル直接編集不可 |
-| GitHub Copilot | 補完中心、自律性が低い |
+| Claude Code | CLI のみ、初心者にはハードル高い |
+| その他CLI | Codespaces との統合性が低い |
 
-**Claude Codeの優位性:**
-- ファイル直接編集・コマンド実行が可能
-- 対話しながら開発が進む
-- コードの説明・レビューも依頼可能
-- 高い自律性
+**GitHub Copilot の優位性:**
+- Codespaces に公式統合（設定不要）
+- インライン補完 + チャット + Agent モード
+- Claude, Gemini, GPT 等のモデルを切り替え可能
+- 料金が安い（Pro $10/月 vs Claude Pro $20/月）
 
-### 4. Next.js / FastAPI を必須としない理由
+### 4. なぜ React を採用しないか
 
-| 技術 | 不採用の理由 |
-|---|---|
-| Next.js | 業務アプリにSSR/SEO不要 |
-| FastAPI | Edge Functionsで大半カバー可能 |
+```
+【React採用時の学習負荷】
+・JavaScript の文法
+・JSX の書き方
+・React のコンポーネント、state、props、hooks
+・非同期処理（async/await）
+・npm, Vite などのビルドツール
 
-**シンプルさを優先:**
-- 学習コストを最小化
-- 必要になったら後から追加可能
+→ ブロンズで学んだ Python の知識が活きない
+→ 「新しい言語」という大きな壁
+
+【Django + HTMX】
+・Python（ブロンズで習得済み）
+・Django テンプレート（HTML + 少しの構文）
+・HTMX（HTML属性を数個覚えるだけ）
+
+→ 実質的に「新しい言語」がゼロ
+```
+
+---
+
+## セキュリティ面の優位性
+
+### Django の組み込みセキュリティ
+
+```
+【Djangoに標準装備】
+・CSRF対策 → トークン自動生成・検証
+・XSS対策 → テンプレートで自動エスケープ
+・SQLインジェクション対策 → ORM で安全にクエリ
+・クリックジャッキング対策 → X-Frame-Options
+・パスワードハッシュ → bcrypt/argon2
+
+【React + Supabase の場合】
+・RLS（Row Level Security）の設計ミスでデータ漏洩リスク
+・クライアントサイドに API キーが露出
+・CSRF対策は自分で実装
+
+→ 非エンジニアが作っても Django は「安全側」に倒れる
+```
 
 ---
 
@@ -427,9 +566,10 @@ After:
 | メリット | 内容 |
 |---|---|
 | 環境構築ゼロ | ブラウザを開くだけで開始 |
-| AI伴走 | Claude Codeが実装をサポート |
+| AI伴走 | GitHub Copilot が実装をサポート |
 | 属人化防止 | 環境がコード化されている |
 | どこでも作業 | PC・場所を選ばない |
+| Python統一 | 新言語の学習不要 |
 
 ### テスト・デプロイフェーズ
 
@@ -445,9 +585,9 @@ After:
 | メリット | 内容 |
 |---|---|
 | 引き継ぎ容易 | 新担当者はログインするだけ |
-| コード理解 | Claude Codeに「このコードの説明」を依頼 |
+| コード理解 | Copilot に「このコードの説明」を依頼 |
 | 修正即反映 | 小さな修正もすぐデプロイ可能 |
-| 監視 | Supabase Dashboardで状況確認 |
+| 監視 | Sentry, Railway ログで状況確認 |
 
 ---
 
@@ -458,9 +598,9 @@ After:
 ```
 ・GitHubアカウント・リポジトリ作成
 ・Codespacesの起動と操作
-・Claude Codeのインストールと使い方
-・React (Vite) プロジェクトの作成
-・基本的なコンポーネント作成
+・GitHub Copilot の有効化と使い方
+・Django プロジェクトの作成
+・基本的なビューとテンプレート
 
 目標: 開発環境を整え、Hello Worldを表示する
 ```
@@ -469,22 +609,23 @@ After:
 
 ```
 ・Supabaseプロジェクト作成
-・テーブル設計（ブロンズのSQLスキルを活用）
+・Django から PostgreSQL に接続
+・モデル設計（ブロンズのSQLスキルを活用）
 ・CRUD操作（作成・読取・更新・削除）
-・認証（ログイン・ログアウト）
-・Row Level Security（権限管理）
+・Django Admin の活用
 
 目標: データの登録・表示ができるアプリを作る
 ```
 
-### 第3部：UI/UX実装（10〜12時間）
+### 第3部：認証とUI/UX実装（10〜12時間）
 
 ```
+・Django 標準認証（ログイン・ログアウト）
+・ユーザー権限管理
 ・フォーム作成（入力、バリデーション）
 ・一覧表示（テーブル、カード）
 ・検索・フィルター機能
-・レスポンシブデザイン（スマホ対応）
-・ナビゲーション
+・HTMX で動的更新
 
 目標: 使いやすい画面を作れるようになる
 ```
@@ -492,10 +633,10 @@ After:
 ### 第4部：データ可視化（6〜8時間）
 
 ```
-・Rechartsの導入
+・Chart.js の導入
 ・棒グラフ、折れ線グラフ、円グラフ
 ・ダッシュボードレイアウト
-・リアルタイム更新
+・HTMX でリアルタイム更新
 
 目標: データをグラフで可視化できる
 ```
@@ -505,7 +646,7 @@ After:
 ```
 ・ブラウザ印刷の実装
 ・印刷用CSSの設定
-・PDF生成（基本）
+・PDF生成（WeasyPrint）
 ・CSV出力
 
 目標: データを印刷・出力できる
@@ -516,11 +657,11 @@ After:
 ```
 ・なぜテストが必要か（「動くコードを壊さない」ための保険）
 ・AIによるコードレビュー
-  → Claude Code に「このコードをレビューして」
+  → Copilot に「このコードをレビューして」
   → セキュリティ、エラーハンドリングのチェック
-・Vitestでユニットテスト
+・pytest でユニットテスト
   → 「この関数のテストを書いて」とAIに依頼
-  → npm run test で自動実行
+  → pytest で自動実行
 ・テストの考え方
   → 重要な関数にはテストを書く
   → 100%を目指さない（実用主義）
@@ -529,7 +670,19 @@ After:
 目標: AIを活用してコードの品質を維持できる
 ```
 
-### 第7部：実践プロジェクト（15〜20時間）
+### 第7部：デプロイ（4〜6時間）
+
+```
+・本番環境の概念（開発 vs 本番）
+・Railway / Render へのデプロイ
+・環境変数の設定
+・静的ファイルの配信（whitenoise）
+・独自ドメインの設定（オプション）
+
+目標: 作ったアプリを本番公開できる
+```
+
+### 第8部：実践プロジェクト（15〜20時間）
 
 ```
 ・自社の業務アプリを開発
@@ -548,12 +701,13 @@ After:
 |---|---|---|
 | 第1部 | 環境構築と基礎 | 8〜10時間 |
 | 第2部 | Supabase連携 | 10〜12時間 |
-| 第3部 | UI/UX実装 | 10〜12時間 |
+| 第3部 | 認証とUI/UX実装 | 10〜12時間 |
 | 第4部 | データ可視化 | 6〜8時間 |
 | 第5部 | 出力機能 | 4〜6時間 |
 | 第6部 | 品質確保の基礎 | 4〜6時間 |
-| 第7部 | 実践プロジェクト | 15〜20時間 |
-| **合計** | | **57〜74時間** |
+| 第7部 | デプロイ | 4〜6時間 |
+| 第8部 | 実践プロジェクト | 15〜20時間 |
+| **合計** | | **61〜80時間** |
 
 ```
 週5時間ペース → 約3〜4ヶ月
@@ -571,7 +725,8 @@ After:
 | GitHub | 無制限（Public）/ 制限あり（Private） | $4/月〜 |
 | Codespaces | 月60時間 | $0.18/時間〜 |
 | Supabase | 2プロジェクト、500MB | $25/月〜 |
-| Claude Code | Pro $20/月推奨 | 従量課金も可 |
+| GitHub Copilot | Free（50リクエスト/月） | Pro $10/月推奨 |
+| Railway/Render | 無料枠あり | $5〜7/月 |
 
 ### 外注との比較
 
@@ -603,16 +758,17 @@ After:
 
 ```
 【シルバーで習得】
-・React によるフロントエンド開発
-・Supabase（SQL）によるデータ管理
-・AI伴走での開発スキル
+・Django によるWebアプリ開発
+・Supabase（PostgreSQL）によるデータ管理
+・AI伴走（Copilot）での開発スキル
 
-    ↓ そのまま活きる
+    ↓ そのまま活きる（Python のまま！）
 
 【ゴールド】
-・Edge Functions でサーバー処理
-・外部API連携（LINE, freee, etc.）
-・Webhook, スケジュール実行
+・requests / httpx で外部API連携
+・Celery でバックグラウンド処理
+・Webhook 受信
+・PWA 化
 ```
 
 ---
@@ -633,12 +789,14 @@ After:
 ### 技術スタック
 
 ```
-React (Vite) + Supabase + Codespaces + Claude Code
+Django + HTMX + Supabase + Codespaces + GitHub Copilot
 
+・ブロンズと同じ Python で学習負荷ゼロ
 ・ブラウザだけで開発〜運用まで完結
 ・ブロンズで習得したSQLがそのまま使える
 ・PCにコードを置かない（属人化防止）
 ・AI伴走で1人でも開発可能
+・セキュリティが標準で組み込み
 ```
 
 ### 期待される成果
@@ -664,24 +822,28 @@ React (Vite) + Supabase + Codespaces + Claude Code
 ### 事前準備（ブロンズ修了後）
 - [ ] GitHubアカウント作成
 - [ ] Supabaseアカウント作成
-- [ ] Claude（Anthropic）アカウント作成
+- [ ] GitHub Copilot の有効化
 - [ ] 作りたい業務アプリの要件整理
 
 ### シルバー開始時
 - [ ] GitHubリポジトリ作成
 - [ ] Codespacesの起動確認
-- [ ] Claude Codeのインストール
-- [ ] Supabaseプロジェクト作成
+- [ ] Copilot の動作確認
+- [ ] Django プロジェクト作成
+- [ ] Supabase PostgreSQL 接続
 
 ### 開発中
 - [ ] 基本的なCRUD機能の実装
+- [ ] Django Admin の活用
 - [ ] 認証機能の実装
+- [ ] HTMX で動的UI
 - [ ] データ可視化の実装
 - [ ] 印刷・出力機能の実装
-- [ ] Vitestでユニットテストの導入
+- [ ] pytest でユニットテストの導入
 - [ ] AIコードレビューの習慣化
 
 ### 完成・運用開始
+- [ ] Railway / Render へデプロイ
 - [ ] 実際の業務での使用開始
 - [ ] フィードバック収集
 - [ ] 改善・機能追加

@@ -56,9 +56,9 @@ Diamond        = デジタルトランスフォーメーション（本来のDX�
 | ステージ | 技術スタック | 改善対象 | ゴール |
 |---|---|---|---|
 | ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 |
-| シルバー | React + Supabase + Codespaces + Claude Code | 組織の業務プロセス | 業務アプリを自作 |
-| ゴールド | + Edge Functions + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
-| プラチナ | + Stripe + Twilio/SendGrid + LIFF + Capacitor + AI | 顧客接点・顧客体験 | 顧客体験の強化 |
+| シルバー | Django + HTMX + Supabase + Copilot | 組織の業務プロセス | 業務アプリを自作 |
+| ゴールド | + requests/httpx + Celery + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
+| プラチナ | + Stripe + Twilio/SendGrid + LIFF + Claude API | 顧客接点・顧客体験 | 顧客体験の強化 |
 | **ダイヤモンド** | **+ scikit-learn + Prophet + Streamlit + 画像認識API** | **事業価値の創出** | **データ駆動経営** |
 
 ---
@@ -438,8 +438,8 @@ Google Colab           ... 実験環境
 
 【シルバー〜プラチナで習得済み → データソースとして活用】
 Supabase               ... 蓄積データの取得元
-React                  ... （Streamlitでダッシュボードを作るため不要な場合も）
-Edge Functions         ... 予測APIの構築
+Django + HTMX          ... 業務アプリ（Streamlitと併用）
+Celery                 ... バックグラウンド処理
 Claude API             ... 分析結果の解釈・レポート生成
 pgvector               ... 類似検索（レコメンド）
 
@@ -464,11 +464,11 @@ Cloud Vision API       ... 画像認識（製造業向け）
 ### なぜStreamlitか
 
 ```
-【Reactとの使い分け】
+【Django + HTMXとの使い分け】
 
-React（シルバーで習得）:
+Django + HTMX（シルバーで習得）:
 ・業務アプリ（CRUD操作、フォーム、ワークフロー）
-・顧客向けアプリ（LINE、ネイティブ）
+・顧客向けアプリ（LIFF、PWA）
 ・日常的に使うツール
 
 Streamlit（ダイヤモンドで追加）:
@@ -478,7 +478,7 @@ Streamlit（ダイヤモンドで追加）:
 ・AIに「Streamlitで可視化して」と言うだけ
 
 → 目的が違うので共存する
-→ ReactアプリからStreamlitダッシュボードにリンク
+→ DjangoアプリからStreamlitダッシュボードにリンク
 ```
 
 ### Streamlitのコード例
@@ -519,7 +519,7 @@ st.dataframe(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
 │                                                   │
 │  ブロンズ: Python + pandas + SQL + Colab          │
 │      ↓                                            │
-│  シルバー〜プラチナ: React + Supabase + ...      │
+│  シルバー〜プラチナ: Django + HTMX + Supabase    │
 │      ↓                                            │
 │  ダイヤモンド: Python + pandas + SQL + Colab      │
 │              + scikit-learn + Prophet              │

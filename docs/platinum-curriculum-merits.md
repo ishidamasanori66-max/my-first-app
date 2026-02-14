@@ -13,7 +13,7 @@
 「顧客接点・顧客体験の強化」
 〜 お客様がまた来たくなる仕組みを 〜
 
-・顧客向けアプリの提供
+・顧客向けアプリの提供（PWA + LINEミニアプリ）
 ・自動リマインド・通知
 ・決済のキャッシュレス化
 ・会員証・クーポンのデジタル化
@@ -48,9 +48,9 @@ Diamond → 蓄積データから次の一手を見つける
 | ステージ | 技術スタック | 改善対象 | ゴール |
 |---|---|---|---|
 | ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 |
-| シルバー | React + Supabase + Codespaces + Claude Code | 組織の業務プロセス | 業務アプリを自作 |
-| ゴールド | + Edge Functions + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
-| **プラチナ** | **+ Stripe + Twilio/SendGrid + LIFF + Capacitor + AI** | **顧客接点・顧客体験** | **顧客体験の強化** |
+| シルバー | Django + HTMX + Supabase + Copilot | 組織の業務プロセス | 業務アプリを自作 |
+| ゴールド | + requests/httpx + Celery + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
+| **プラチナ** | **+ Stripe + Twilio/SendGrid + LIFF + Claude API** | **顧客接点・顧客体験** | **顧客体験の強化** |
 | ダイヤモンド | + scikit-learn + Prophet + Streamlit | 事業価値の創出 | データ駆動経営 |
 
 ---
@@ -62,7 +62,7 @@ Diamond → 蓄積データから次の一手を見つける
 ```
 【できていること】
 ・社内システムが統合されている
-・業務データが自動で流れる
+・業務データが自動で流れる（Celery）
 ・社内スタッフはPWAでどこからでもアクセス
 
 【残っている課題】
@@ -108,9 +108,9 @@ Diamond → 蓄積データから次の一手を見つける
 → リマインド作業ゼロ、無断キャンセル激減
 
 【技術】
-・LIFF（予約フォーム）
+・LIFF（予約フォーム）※最小限のJavaScript
 ・Twilio SMS / LINE Messaging API（自動通知）
-・Edge Functions（スケジュール実行）
+・Celery Beat（スケジュール実行）
 ```
 
 ### 事例2：キャッシュレス決済（飲食・小売）
@@ -133,7 +133,7 @@ Diamond → 蓄積データから次の一手を見つける
 【技術】
 ・Stripe（決済API）
 ・PWA / LIFF（注文アプリ）
-・Supabase（注文・決済データ管理）
+・Django + Supabase（注文・決済データ管理）
 ```
 
 ### 事例3：デジタル会員証・クーポン（カフェ・アパレル）
@@ -155,7 +155,7 @@ Diamond → 蓄積データから次の一手を見つける
 
 【技術】
 ・LIFF / PWA（会員証アプリ）
-・Supabase（顧客・購買データベース）
+・Django + Supabase（顧客・購買データベース）
 ・Claude API（おすすめ商品のAI提案）
 ```
 
@@ -180,10 +180,10 @@ Diamond → 蓄積データから次の一手を見つける
 ・Claude API（対話AI）
 ・Supabase pgvector（FAQ検索/RAG）
 ・LINE Messaging API / Web Widget
-・Edge Functions
+・Django（APIエンドポイント）
 ```
 
-### 事例5：ネイティブアプリで顧客接点（サービス業）
+### 事例5：PWAで顧客接点（サービス業）
 
 ```
 【Before】
@@ -194,17 +194,16 @@ Diamond → 蓄積データから次の一手を見つける
 → 顧客との継続的な接点がない
 
 【After】
-1. App Store / Google Play でアプリ配布
-2. ホーム画面にアイコン
-3. 新商品・キャンペーンをプッシュ通知
-4. カメラでQR読み取り、ポイント付与
-→ 顧客との継続的な関係構築
+1. PWAでアプリライクな体験を提供
+2. 「ホーム画面に追加」でアイコン表示
+3. Service Workerでオフライン対応
+4. LINEとの連携でプッシュ通知代替
+→ アプリストア審査なしで即配布
 
 【技術】
-・Capacitor（Reactをネイティブ化）
-・Push Notification
-・カメラ・QRスキャン
-・既存のReact + Supabaseをそのまま活用
+・Django + HTMX + PWA
+・manifest.json + Service Worker
+・LIFF連携（LINE経由での通知）
 ```
 
 ---
@@ -227,7 +226,7 @@ Diamond → 蓄積データから次の一手を見つける
 | デジタル会員証 | 紙カード廃止、顧客データ蓄積 |
 | パーソナライズクーポン | 購買履歴に基づいた販促 |
 | 在庫確認アプリ | 取り置き依頼がオンラインで完結 |
-| ネイティブアプリ | App Storeでブランド認知 |
+| PWA配布 | アプリストア審査なしで即提供 |
 
 ### 歯科・医療
 
@@ -274,7 +273,7 @@ Diamond → 蓄積データから次の一手を見つける
 ・購買履歴に基づいたアップセル
 
 【新規顧客獲得】
-・App Store/Google Playでの露出
+・PWAでQRコード一発配布
 ・SNS連携による口コミ
 ・友達紹介クーポン
 ```
@@ -309,17 +308,16 @@ Diamond → 蓄積データから次の一手を見つける
 
 ```
 【シルバー・ゴールドから継続】
-React (Vite)           ... フロントエンド
-Supabase               ... データベース・認証・ストレージ
-Edge Functions         ... サーバー処理・API連携
+Django + HTMX          ... Webアプリフレームワーク
+Supabase               ... マネージドPostgreSQL
+Celery + Redis         ... バックグラウンド処理・スケジュール
 GitHub Codespaces      ... 開発環境
-Claude Code            ... AI伴走開発
+GitHub Copilot         ... AI伴走開発
 
 【プラチナで追加】
 Stripe                 ... 決済
 Twilio / SendGrid      ... SMS/メール通知
-LIFF (LINE)            ... LINEミニアプリ
-Capacitor              ... ネイティブアプリ化
+LIFF (LINE)            ... LINEミニアプリ（最小限JS）
 Claude API             ... AIパーソナライズ
 Supabase pgvector      ... AI用ベクトル検索
 ```
@@ -330,15 +328,15 @@ Supabase pgvector      ... AI用ベクトル検索
 |---|---|---|---|
 | **決済** | Stripe | オンライン決済 | 8〜12時間 |
 | **通知** | Twilio / SendGrid | SMS/メール自動送信 | 6〜8時間 |
-| **LINE** | LIFF + Messaging API | LINEミニアプリ | 16〜24時間 |
-| **ネイティブ** | Capacitor | iOS/Androidアプリ化 | 20〜30時間 |
+| **LINE** | LIFF + Messaging API | LINEミニアプリ | 12〜18時間 |
 | **AI** | Claude API | 対話AI、パーソナライズ | 12〜16時間 |
 | **RAG** | pgvector | FAQ検索、知識ベース | 8〜12時間 |
 
 ```
 → すべての技術がシルバー・ゴールドの知識を100%活用
-→ React + Supabase + Edge Functions の構成は変わらない
+→ Django + HTMX + Supabase の構成は変わらない
 → 追加するのは「顧客との接点」を作る技術のみ
+→ LIFFのみ最小限のJavaScript（LIFF SDK初期化）
 ```
 
 ---
@@ -347,32 +345,50 @@ Supabase pgvector      ... AI用ベクトル検索
 
 ### Stripe（決済）
 
+```python
+# views.py - Stripe決済セッションの作成
+import stripe
+from django.conf import settings
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def create_checkout_session(request):
+    """決済セッションを作成"""
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price_data': {
+                'currency': 'jpy',
+                'product_data': {'name': '商品名'},
+                'unit_amount': 1000,
+            },
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url=request.build_absolute_uri('/payment/success/'),
+        cancel_url=request.build_absolute_uri('/payment/cancel/'),
+    )
+    return redirect(session.url)
+
+# Webhook で決済完了を受け取る
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+
+    event = stripe.Webhook.construct_event(
+        payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+    )
+
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        # 注文を確定処理
+        fulfill_order(session)
+
+    return HttpResponse(status=200)
 ```
-【できること】
-・クレジットカード決済
-・QRコード決済
-・サブスクリプション（月額課金）
-・請求書払い
 
-【実装イメージ】
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
-// 決済セッションの作成
-const session = await stripe.checkout.sessions.create({
-  payment_method_types: ['card'],
-  line_items: [{
-    price_data: {
-      currency: 'jpy',
-      product_data: { name: '商品名' },
-      unit_amount: 1000,
-    },
-    quantity: 1,
-  }],
-  mode: 'payment',
-  success_url: 'https://example.com/success',
-  cancel_url: 'https://example.com/cancel',
-});
-
+```
 【対象業種】
 ・飲食店（モバイルオーダー）
 ・小売（ECサイト）
@@ -381,22 +397,53 @@ const session = await stripe.checkout.sessions.create({
 
 ### Twilio / SendGrid（通知）
 
+```python
+# tasks.py - Celeryでリマインド送信
+from celery import shared_task
+from twilio.rest import Client
+from django.conf import settings
+
+@shared_task
+def send_reservation_reminder(phone_number, customer_name, date_time):
+    """予約リマインドSMSを送信"""
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+
+    message = client.messages.create(
+        body=f'{customer_name}様、明日 {date_time} のご予約のリマインドです。',
+        from_=settings.TWILIO_PHONE_NUMBER,
+        to=phone_number
+    )
+    return message.sid
+
+# スケジュール設定（毎朝9時に翌日の予約をリマインド）
+app.conf.beat_schedule = {
+    'daily-reminder': {
+        'task': 'app.tasks.send_daily_reminders',
+        'schedule': crontab(hour='9', minute='0'),
+    },
+}
 ```
-【できること】
-・SMS送信（Twilio）
-・メール送信（SendGrid）
-・予約リマインド
-・キャンペーン通知
 
-【実装イメージ - SMS】
-const twilio = require('twilio')(accountSid, authToken);
+```python
+# SendGrid でメール送信
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
-await twilio.messages.create({
-  body: '明日のご予約のリマインドです。10:00〜 山田様',
-  from: '+815012345678',
-  to: '+819012345678'
-});
+def send_email_notification(to_email, subject, content):
+    """メール通知を送信"""
+    message = Mail(
+        from_email=settings.FROM_EMAIL,
+        to_emails=to_email,
+        subject=subject,
+        html_content=content
+    )
 
+    sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+    response = sg.send(message)
+    return response.status_code
+```
+
+```
 【対象業種】
 ・歯科・医療（予約リマインド）
 ・自動車整備（車検通知）
@@ -406,95 +453,239 @@ await twilio.messages.create({
 ### LIFF（LINEミニアプリ）
 
 ```
-【できること】
-・LINE内でWebアプリを表示
-・LINEログイン連携
-・顧客のLINE IDを取得
-・LINE公式アカウントとの統合
+【LIFF = LINE Front-end Framework】
 
-【技術構成】
+LINEアプリ内でWebページを表示する仕組み
+→ 顧客はLINEを開くだけで予約・会員証が使える
+
 ┌─────────────────────────────────────┐
 │ LINE アプリ                        │
 │ ┌─────────────────────────────────┐│
-│ │ LIFF（自社Reactアプリ）        ││
+│ │ LIFF（Django + HTMXアプリ）    ││
 │ │ ・予約フォーム                 ││
 │ │ ・会員証表示                   ││
 │ │ ・クーポン一覧                 ││
 │ └─────────────────────────────────┘│
 └─────────────────────────────────────┘
           ↓ API
+    Django（バックエンド）
+          ↓
     Supabase（データベース）
-          ↑ 連携
-    社内管理アプリ（ゴールドで構築済み）
+```
 
+```html
+<!-- templates/liff_base.html -->
+<!-- LIFFはここだけ最小限のJavaScriptが必要 -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    {% block content %}{% endblock %}
+
+    <script>
+    // LIFF SDK初期化（これだけがJavaScript）
+    liff.init({ liffId: '{{ liff_id }}' }).then(() => {
+        if (!liff.isLoggedIn()) {
+            liff.login();
+        }
+    });
+    </script>
+</body>
+</html>
+```
+
+```python
+# views.py - LIFF用のビュー
+from django.shortcuts import render
+from django.conf import settings
+import requests
+
+def liff_reservation(request):
+    """LIFF予約画面"""
+    return render(request, 'liff/reservation.html', {
+        'liff_id': settings.LIFF_ID
+    })
+
+def get_line_profile(access_token):
+    """LINEプロフィールを取得"""
+    headers = {'Authorization': f'Bearer {access_token}'}
+    response = requests.get(
+        'https://api.line.me/v2/profile',
+        headers=headers
+    )
+    return response.json()  # {'userId': '...', 'displayName': '山田太郎', ...}
+```
+
+```html
+<!-- templates/liff/reservation.html -->
+{% extends "liff_base.html" %}
+{% block title %}予約{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>予約フォーム</h1>
+
+    <!-- HTMXで動的に更新（JavaScript不要）-->
+    <form hx-post="{% url 'create_reservation' %}"
+          hx-target="#result"
+          hx-swap="innerHTML">
+        {% csrf_token %}
+
+        <label>日付</label>
+        <input type="date" name="date" required>
+
+        <label>時間</label>
+        <select name="time"
+                hx-get="{% url 'available_times' %}"
+                hx-trigger="change from:[name=date]"
+                hx-include="[name=date]">
+            <option>日付を選択してください</option>
+        </select>
+
+        <button type="submit">予約する</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+{% endblock %}
+```
+
+```
 【シルバー・ゴールドとの相性】
-・Reactのコードをほぼそのまま使用
+・Django + HTMXのコードをほぼそのまま使用
 ・Supabaseとの連携も変更なし
-・追加するのはLIFF SDKのみ
-```
-
-### Capacitor（ネイティブアプリ）
-
-```
-【できること】
-・ReactアプリをiOS/Androidアプリに変換
-・App Store / Google Play に公開
-・プッシュ通知
-・カメラ、GPS、QRスキャン
-
-【なぜCapacitorか】
-┌─────────────────────────────────────────────┐
-│ React Native / Flutter を選ばない理由      │
-├─────────────────────────────────────────────┤
-│ ・コードの書き直しが必要                   │
-│ ・新しい言語/フレームワークの学習が必要    │
-│ ・シルバー・ゴールドの知識が活かせない     │
-└─────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────┐
-│ Capacitor を選ぶ理由                       │
-├─────────────────────────────────────────────┤
-│ ・既存のReactコードをそのまま使用         │
-│ ・Supabase連携もそのまま                   │
-│ ・Web版とネイティブ版を同一コードベース    │
-│ ・シルバー・ゴールドの知識を100%活用       │
-└─────────────────────────────────────────────┘
-
-【追加で必要なもの】
-・Xcode（iOS用、Mac必要）
-・Android Studio（Android用）
-・Apple Developer Program（$99/年）
-・Google Play Developer（$25、一度きり）
+・追加するのはLIFF SDKの初期化のみ（最小限JS）
 ```
 
 ### Claude API（AIパーソナライズ）
 
+```python
+# views.py - AIパーソナライズ
+import anthropic
+from django.conf import settings
+
+client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+
+def get_personalized_recommendation(customer):
+    """購買履歴に基づいたおすすめ提案"""
+    # 顧客の購買履歴を取得
+    purchase_history = customer.purchases.order_by('-date')[:10]
+    history_text = '\n'.join([
+        f"- {p.product.name}（{p.date}）" for p in purchase_history
+    ])
+
+    # 在庫情報を取得
+    available_products = Product.objects.filter(stock__gt=0)[:20]
+    products_text = '\n'.join([
+        f"- {p.name}（{p.price}円）" for p in available_products
+    ])
+
+    response = client.messages.create(
+        model='claude-sonnet-4-20250514',
+        max_tokens=1024,
+        messages=[{
+            'role': 'user',
+            'content': f'''以下の顧客の購買履歴に基づいて、おすすめ商品を3つ提案してください。
+
+【購買履歴】
+{history_text}
+
+【在庫のある商品】
+{products_text}
+
+各おすすめについて、なぜその商品がおすすめなのか理由も添えてください。'''
+        }]
+    )
+
+    return response.content[0].text
+
+# チャットボット用ビュー
+def chatbot_response(request):
+    """顧客対応チャットボット"""
+    user_message = request.POST.get('message')
+
+    # FAQをベクトル検索（RAG）
+    relevant_faqs = search_similar_faqs(user_message)
+    context = '\n'.join([f"Q: {faq.question}\nA: {faq.answer}" for faq in relevant_faqs])
+
+    response = client.messages.create(
+        model='claude-sonnet-4-20250514',
+        max_tokens=1024,
+        system=f'''あなたは当店のカスタマーサポートです。
+以下のFAQを参考に、お客様の質問に答えてください。
+
+{context}
+
+答えられない質問は「担当者にお繋ぎします」と回答してください。''',
+        messages=[{'role': 'user', 'content': user_message}]
+    )
+
+    return JsonResponse({'response': response.content[0].text})
 ```
-【できること】
-・顧客対応チャットボット
-・おすすめ商品の提案
-・問い合わせの自動分類
-・FAQに基づいた回答生成（RAG）
 
-【実装イメージ】
-const anthropic = new Anthropic();
-
-const response = await anthropic.messages.create({
-  model: 'claude-sonnet-4-20250514',
-  max_tokens: 1024,
-  messages: [{
-    role: 'user',
-    content: `以下の顧客の購買履歴に基づいて、おすすめ商品を3つ提案してください。
-
-    購買履歴: ${purchaseHistory}
-    在庫情報: ${inventory}`
-  }]
-});
-
+```
 【AIの役割】
 ・判断の補助（完全自動化ではない）
 ・人間のバックアップ付きで運用
 ・複雑な問い合わせはスタッフにエスカレーション
+```
+
+### PWA（Progressive Web App）
+
+```
+【PWAとは】
+Webサイトをアプリのように使えるようにする技術
+→ App Storeの審査なしで即配布可能
+→ ホーム画面にアイコンが置ける
+→ オフラインでも一部機能が使える
+```
+
+```python
+# views.py - PWA用のmanifest.jsonを動的生成
+def manifest(request):
+    """PWA用マニフェスト"""
+    manifest_data = {
+        "name": "店舗名アプリ",
+        "short_name": "店舗名",
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": "#ffffff",
+        "theme_color": "#0066cc",
+        "icons": [
+            {"src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png"}
+        ]
+    }
+    return JsonResponse(manifest_data)
+```
+
+```javascript
+// static/js/service-worker.js（PWA用、これは必要なJS）
+const CACHE_NAME = 'v1';
+const ASSETS = [
+    '/',
+    '/static/css/style.css',
+    '/offline/'
+];
+
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    );
+});
+
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => response || fetch(event.request))
+            .catch(() => caches.match('/offline/'))
+    );
+});
 ```
 
 ---
@@ -529,7 +720,7 @@ Meta連携は審査プロセスやコンプライアンス対応が必要なた�
 ```
 Meta Graph API       ... 投稿管理、インサイト取得
 Meta Marketing API   ... 広告管理、オーディエンス同期
-Edge Functions       ... API連携のハブ
+Django Views         ... API連携のハブ
 Supabase            ... 顧客データとの紐づけ
 ```
 
@@ -540,10 +731,10 @@ Supabase            ... 顧客データとの紐づけ
 ### 第1部：顧客データベースの設計（6〜8時間）
 
 ```
-・顧客テーブルの設計（Supabase）
+・顧客テーブルの設計（Django ORM）
 ・購買履歴・来店履歴の管理
 ・セグメント（顧客グループ分け）
-・Row Level Security（顧客ごとのデータ保護）
+・Django Admin での顧客管理画面
 
 目標: 顧客データを適切に管理できるDB設計
 ```
@@ -566,19 +757,20 @@ Supabase            ... 顧客データとの紐づけ
 ・SMS送信（Twilio）
 ・メール送信（SendGrid）
 ・予約リマインドの自動化
-・スケジュール実行との組み合わせ
+・Celery Beatでのスケジュール実行
 
 目標: 顧客への自動通知を実装できる
 ```
 
-### 第4部：LINEミニアプリ - LIFF（16〜24時間）
+### 第4部：LINEミニアプリ - LIFF（12〜18時間）
 
 ```
 ・LINE Developersアカウント設定
-・LIFF SDKの導入
+・LIFF SDKの導入（最小限JS）
 ・LINEログイン連携
 ・LINE公式アカウントとの統合
 ・顧客向けUI（予約、会員証、クーポン）
+・Django + HTMXでほぼ全てを実装
 
 目標: LINE上で動作する顧客向けアプリを作れる
 ```
@@ -586,7 +778,7 @@ Supabase            ... 顧客データとの紐づけ
 ### 第5部：AIパーソナライズ - Claude API（12〜16時間）
 
 ```
-・Claude APIの基本
+・Claude APIの基本（Pythonで呼び出し）
 ・顧客対応チャットボット
 ・購買履歴に基づくおすすめ提案
 ・Supabase pgvector でFAQ検索（RAG基礎）
@@ -594,16 +786,15 @@ Supabase            ... 顧客データとの紐づけ
 目標: AIを活用した顧客体験の向上
 ```
 
-### 第6部：ネイティブアプリ - Capacitor（オプション、20〜30時間）
+### 第6部：PWA強化（4〜6時間）
 
 ```
-・Capacitorの導入
-・iOS / Androidビルド
-・プッシュ通知の実装
-・カメラ・QRスキャン
-・App Store / Google Play への公開
+・Service Workerの詳細
+・オフライン対応
+・プッシュ通知（Web Push API）
+・インストールバナーの最適化
 
-目標: ネイティブアプリとして配布できる
+目標: アプリライクな体験を提供できる
 ```
 
 ### 第7部：本番品質と監視（4〜6時間）
@@ -632,7 +823,7 @@ Supabase            ... 顧客データとの紐づけ
 ```
 ・自社の顧客向けアプリを開発
 ・決済 or 予約 or 会員証から1つ選択
-・LINE or ネイティブアプリで提供
+・LINEミニアプリ or PWAで提供
 ・実際の顧客に使用開始
 ・効果測定と改善
 
@@ -648,11 +839,12 @@ Supabase            ... 顧客データとの紐づけ
 | 第1部 | 顧客データベース設計 | 6〜8時間 |
 | 第2部 | 決済連携（Stripe） | 8〜12時間 |
 | 第3部 | 自動通知（Twilio/SendGrid） | 6〜8時間 |
-| 第4部 | LINEミニアプリ（LIFF） | 16〜24時間 |
+| 第4部 | LINEミニアプリ（LIFF） | 12〜18時間 |
 | 第5部 | AIパーソナライズ | 12〜16時間 |
+| 第6部 | PWA強化 | 4〜6時間 |
 | 第7部 | 本番品質と監視 | 4〜6時間 |
 | 第8部 | 実践プロジェクト | 15〜20時間 |
-| **合計（必須）** | | **67〜94時間** |
+| **合計** | | **67〜94時間** |
 
 ```
 週5時間ペース → 約3.5〜5ヶ月
@@ -663,7 +855,6 @@ Supabase            ... 顧客データとの紐づけ
 
 | 項目 | 目安時間 |
 |---|---|
-| Capacitor（ネイティブ化） | 20〜30時間 |
 | Meta連携（SNS） | 16〜24時間 |
 
 ---
@@ -675,19 +866,14 @@ Supabase            ... 顧客データとの紐づけ
 | 項目 | 月額/費用 |
 |---|---|
 | Supabase（Pro） | $25 |
+| Railway / Render | 無料〜$20 |
 | Stripe | 決済額の3.6% |
 | Twilio SMS | 約¥10/通 |
 | SendGrid | 無料〜$20 |
 | LINE公式アカウント | 無料〜¥5,000 |
 | Claude API | 従量課金（$3-15/100万トークン） |
-| **合計目安** | **$50〜100 + 従量** |
-
-### App Store / Google Play
-
-| 項目 | 費用 |
-|---|---|
-| Apple Developer Program | $99/年 |
-| Google Play Developer | $25（一度きり） |
+| GitHub Copilot Pro | $10 |
+| **合計目安** | **$60〜100 + 従量** |
 
 ### ROI（投資対効果）
 
@@ -731,7 +917,7 @@ Supabase            ... 顧客データとの紐づけ
 ・LINE公式アカウントの料金プラン確認
 ・月間メッセージ数の上限に注意
 ・LINEのガイドライン遵守
-・iOS/Androidで一部挙動が異なる場合あり
+・LIFF SDK初期化には最小限JSが必要
 ```
 
 ### 4. AIの注意点
@@ -743,15 +929,6 @@ Supabase            ... 顧客データとの紐づけ
 ・API利用料のモニタリング
 ```
 
-### 5. ネイティブアプリの注意点
-
-```
-・App Storeの審査に時間がかかる（数日〜数週間）
-・Appleのガイドライン遵守が必要
-・iOS開発にはMacが必要
-・アプリの継続的なアップデートが必要
-```
-
 ---
 
 ## ゴールドとの技術継承
@@ -760,25 +937,26 @@ Supabase            ... 顧客データとの紐づけ
 
 ```
 【シルバー・ゴールドで習得済み】
-✓ React（UI構築）
-✓ Supabase（DB、認証、ストレージ）
-✓ SQL（データ操作）
-✓ Edge Functions（サーバー処理）
-✓ 外部API連携（LINE, freee等）
-✓ Webhook、スケジュール実行
+✓ Django + HTMX（UI構築）
+✓ Supabase（PostgreSQL）
+✓ Django ORM（データ操作）
+✓ requests/httpx（外部API連携）
+✓ Celery（バックグラウンド処理）
+✓ LINE API, freee API等
 ✓ PWA（アプリ化の基礎）
-✓ GitHub Codespaces + Claude Code
+✓ GitHub Codespaces + Copilot
+✓ pytest（テスト）
 
 【プラチナで追加】
 + Stripe SDK
 + Twilio/SendGrid SDK
-+ LIFF SDK
-+ Capacitor
++ LIFF SDK（最小限JS）
 + Claude API
 + pgvector
 
 → 新しい言語やフレームワークの学び直しは不要
 → 追加するのは「顧客との接点」を作るSDK・APIのみ
+→ すべてPythonで完結（LIFFの初期化のみ最小限JS）
 ```
 
 ---
@@ -791,30 +969,31 @@ Supabase            ... 顧客データとの紐づけ
 「顧客接点・顧客体験の強化」
 〜 お客様がまた来たくなる仕組みを 〜
 
-・顧客向けアプリの提供（LINE / ネイティブ）
+・顧客向けアプリの提供（LIFF / PWA）
 ・決済のキャッシュレス化（Stripe）
-・自動リマインド（Twilio / SendGrid）
-・パーソナライズ（AI）
+・自動リマインド（Twilio / SendGrid / Celery）
+・パーソナライズ（Claude API）
 ・データに基づいた顧客理解
 ```
 
 ### 技術スタック
 
 ```
-React + Supabase + Edge Functions
-+ Stripe + Twilio/SendGrid + LIFF + Capacitor + Claude API
+Django + HTMX + Supabase + Celery
++ Stripe + Twilio/SendGrid + LIFF + Claude API
 
 ・ゴールドまでの技術をすべて継続活用
 ・追加するのは「顧客との接点」を作る技術のみ
-・LINE or ネイティブアプリで顧客にリーチ
+・LINEミニアプリ or PWA で顧客にリーチ
 ・AIでパーソナライズされた体験を提供
+・LIFFのみ最小限のJavaScript
 ```
 
 ### 期待される成果
 
 ```
 プラチナ修了者は:
-・顧客向けアプリ（LINE/ネイティブ）を作れる
+・顧客向けアプリ（LINE/PWA）を作れる
 ・オンライン決済を実装できる
 ・自動通知・リマインドを構築できる
 ・AIを活用した顧客体験向上ができる
@@ -875,14 +1054,15 @@ React + Supabase + Edge Functions
 - [ ] LINE公式アカウント作成
 
 ### 第1〜3部（決済・通知）
-- [ ] 顧客データベースの設計
+- [ ] 顧客データベースの設計（Django ORM）
 - [ ] Stripe Checkoutの実装
 - [ ] Webhook（決済完了通知）の実装
 - [ ] SMS/メール送信の実装
-- [ ] 予約リマインドの自動化
+- [ ] 予約リマインドの自動化（Celery Beat）
 
 ### 第4部（LINEミニアプリ）
 - [ ] LIFFアプリの作成
+- [ ] LIFF SDK導入（最小限JS）
 - [ ] LINEログイン連携
 - [ ] 顧客向けUI（予約/会員証等）
 - [ ] 公式アカウントとの統合
@@ -893,18 +1073,13 @@ React + Supabase + Edge Functions
 - [ ] おすすめ提案の実装
 - [ ] pgvectorでFAQ検索
 
-### 第7部（本番品質と監視）
+### 第6〜7部（PWA・品質）
+- [ ] Service Workerの強化
 - [ ] Sentryの導入
 - [ ] エラー通知の設定（Slack連携）
 - [ ] 決済フローのテスト
 - [ ] 品質レポートの生成
 - [ ] セキュリティチェック
-
-### オプション（Capacitor）
-- [ ] 開発環境のセットアップ（Xcode/Android Studio）
-- [ ] ネイティブビルド
-- [ ] プッシュ通知の実装
-- [ ] アプリストアへの申請
 
 ### 実践プロジェクト
 - [ ] 顧客向けアプリの開発
