@@ -18,26 +18,42 @@
 ・決済のキャッシュレス化
 ・会員証・クーポンのデジタル化
 ・AIによるパーソナライズ
+・SNSとの連携
+```
+
+### ブロンズ〜ゴールドとの違い
+
+```
+【ブロンズ〜ゴールド】全員が全部学ぶ
+・基礎スキルの土台を作る
+・共通の知識を順番に積み上げる
+・全員が同じカリキュラムを修了する
+
+【プラチナ】必要なものを選んで学ぶ
+・顧客接点は業種・職種・顧客特性で異なる
+・飲食店に決済は必要だが、製造業には不要
+・歯科にLINE予約は必要だが、ECサイトには不要
+・自社に合うモジュールを選択して学ぶ
 ```
 
 ---
 
 ## 5ステージの一貫したストーリー
 
-| ステージ | コンセプト | 改善対象 |
-|---|---|---|
-| ブロンズ | 「あなたの3時間を5分に」 | 個人の業務 |
-| シルバー | 「Excelを送る業務をなくす」 | 組織の業務プロセス |
-| ゴールド | 「二重入力をゼロに」 | 社内システム全体 |
-| **プラチナ** | **「お客様がまた来たくなる仕組みを」** | **顧客接点・顧客体験** |
-| ダイヤモンド | 「データが次の一手を教えてくれる」 | 事業価値の創出 |
+| ステージ | コンセプト | 改善対象 | 学習形態 |
+|---|---|---|---|
+| ブロンズ | 「あなたの3時間を5分に」 | 個人の業務 | 全員共通 |
+| シルバー | 「Excelを送る業務をなくす」 | 組織の業務プロセス | 全員共通 |
+| ゴールド | 「二重入力をゼロに」 | 社内システム全体 | 全員共通 |
+| **プラチナ** | **「お客様がまた来たくなる仕組みを」** | **顧客接点・顧客体験** | **選択制** |
+| ダイヤモンド | 「データが次の一手を教えてくれる」 | 事業価値の創出 | 選択制 |
 
 ```
 【内から外へ、そしてデータから未来へ】
 Bronze  → 自分の業務を効率化
 Silver  → 社内の情報共有をデジタル化
 Gold    → 社内システム同士を繋ぐ
-Platinum → 顧客との接点を作る・強化する
+Platinum → 顧客との接点を作る・強化する（業種に応じて選択）
 Diamond → 蓄積データから次の一手を見つける
 ```
 
@@ -50,7 +66,7 @@ Diamond → 蓄積データから次の一手を見つける
 | ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 |
 | シルバー | Django + HTMX + Supabase + Copilot | 組織の業務プロセス | 業務アプリを自作 |
 | ゴールド | + requests/httpx + Celery + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
-| **プラチナ** | **+ Stripe + Twilio/SendGrid + LIFF + Claude API** | **顧客接点・顧客体験** | **顧客体験の強化** |
+| **プラチナ** | **+ 選択モジュール（下記）** | **顧客接点・顧客体験** | **顧客体験の強化** |
 | ダイヤモンド | + scikit-learn + Prophet + Streamlit | 事業価値の創出 | データ駆動経営 |
 
 ---
@@ -71,6 +87,7 @@ Diamond → 蓄積データから次の一手を見つける
 ・リマインドは手動で連絡
 ・決済は現金・カードの対面のみ
 ・リピート促進は勘と経験頼み
+・SNSの活用ができていない
 ```
 
 ### プラチナで解決
@@ -82,15 +99,83 @@ Diamond → 蓄積データから次の一手を見つける
 ・オンライン決済で事前精算
 ・購買履歴に基づいたクーポン配布
 ・AIがパーソナライズされた提案
+・Instagram/Facebookとの連携
 
 → 「お客様がまた来たくなる仕組み」
+→ ただし、すべてが必要なわけではない
+→ 自社に合うものを選んで導入する
+```
+
+---
+
+## カリキュラム構成：共通基盤 + 選択モジュール
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  プラチナカリキュラム                                        │
+│                                                               │
+│  【共通基盤】（全員必須）                                    │
+│  ├ 顧客データベース設計                                     │
+│  └ Google AI Studio でプロンプト設計                         │
+│                                                               │
+│  【選択モジュール】（自社に必要なものを選択）                │
+│  ├ A: 決済（Stripe）                                        │
+│  ├ B: 通知（Twilio / SendGrid）                             │
+│  ├ C: LINE（LIFF + Messaging API）                          │
+│  ├ D: AI実装                                                │
+│  │   ├ D-1: AppSheet + Gemini（ノーコード）                │
+│  │   └ D-2: Django + AI APIs（コード）                     │
+│  ├ E: PWA強化                                               │
+│  └ F: SNS連携（Meta Graph API）                             │
+│                                                               │
+│  【共通】（全員必須）                                        │
+│  ├ 本番品質と監視                                           │
+│  └ 実践プロジェクト                                         │
+│                                                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 業種別の選択ガイド
+
+| 業種 | 推奨モジュール | 理由 |
+|---|---|---|
+| 歯科・医療 | B + C + D-1 | 予約リマインド + LINE予約 + 問診AI |
+| 飲食店 | A + C + E + F | モバイルオーダー + LINE + PWA + Instagram |
+| 小売・アパレル | A + D-2 + E + F | EC決済 + レコメンドAI + PWA + Instagram |
+| 美容サロン | B + C + D-1 + F | 来店提案 + LINE予約 + AI + Instagram |
+| カフェ | A + E + F | 事前決済 + PWA + SNS集客 |
+| 自動車整備 | B + C + D-1 | 車検リマインド + LINE + 見積もりAI |
+| 製造業 | D-2 | 画像認識による検査AI |
+
+### 選択フローチャート
+
+```
+Q1: 顧客からオンラインで代金を受け取りますか？
+  → はい → モジュールA（Stripe）
+
+Q2: 予約やリマインドの自動送信が必要ですか？
+  → はい → モジュールB（Twilio / SendGrid）
+
+Q3: 顧客の多くがLINEを使っていますか？
+  → はい → モジュールC（LIFF）
+
+Q4: AI機能を導入しますか？
+  → はい → カスタマイズが必要？
+    → いいえ → モジュールD-1（AppSheet + Gemini）
+    → はい  → モジュールD-2（Django + AI APIs）
+
+Q5: アプリとして配布しますか？
+  → はい → モジュールE（PWA強化）
+
+Q6: Instagram / Facebook で集客・発信していますか？
+  → はい → モジュールF（SNS連携）
 ```
 
 ---
 
 ## Before / After 事例
 
-### 事例1：予約リマインド（歯科・美容・整備）
+### 事例1：予約リマインド（歯科・美容・整備）→ モジュールB + C
 
 ```
 【Before】
@@ -113,7 +198,7 @@ Diamond → 蓄積データから次の一手を見つける
 ・Celery Beat（スケジュール実行）
 ```
 
-### 事例2：キャッシュレス決済（飲食・小売）
+### 事例2：キャッシュレス決済（飲食・小売）→ モジュールA
 
 ```
 【Before】
@@ -136,7 +221,7 @@ Diamond → 蓄積データから次の一手を見つける
 ・Django + Supabase（注文・決済データ管理）
 ```
 
-### 事例3：デジタル会員証・クーポン（カフェ・アパレル）
+### 事例3：デジタル会員証・クーポン（カフェ・アパレル）→ モジュールC + D
 
 ```
 【Before】
@@ -156,10 +241,12 @@ Diamond → 蓄積データから次の一手を見つける
 【技術】
 ・LIFF / PWA（会員証アプリ）
 ・Django + Supabase（顧客・購買データベース）
-・Claude API（おすすめ商品のAI提案）
+・AI（おすすめ商品の提案）
+  → D-1: AppSheet + Gemini で設定
+  → D-2: Django + Claude API でコード実装
 ```
 
-### 事例4：顧客対応AI（全業種）
+### 事例4：顧客対応AI（全業種）→ モジュールD-2
 
 ```
 【Before】
@@ -177,13 +264,13 @@ Diamond → 蓄積データから次の一手を見つける
 → 即時対応で顧客満足度向上
 
 【技術】
-・Claude API（対話AI）
+・Claude API / Gemini API（対話AI）
 ・Supabase pgvector（FAQ検索/RAG）
 ・LINE Messaging API / Web Widget
 ・Django（APIエンドポイント）
 ```
 
-### 事例5：PWAで顧客接点（サービス業）
+### 事例5：PWAで顧客接点（サービス業）→ モジュールE
 
 ```
 【Before】
@@ -206,29 +293,52 @@ Diamond → 蓄積データから次の一手を見つける
 ・LIFF連携（LINE経由での通知）
 ```
 
+### 事例6：SNS集客の自動化（飲食・美容・アパレル）→ モジュールF
+
+```
+【Before】
+1. Instagram投稿を手動で作成
+2. 複数のSNSにそれぞれ投稿
+3. コメント・DMを個別に確認
+4. 広告効果が測定できない
+→ SNS運用に毎日1時間以上
+
+【After】
+1. 投稿の一括管理・予約投稿
+2. DM・コメントをSupabaseに集約
+3. 広告効果をダッシュボードで確認
+4. 顧客データとSNSデータを紐づけ
+→ SNS運用の効率化、効果の見える化
+
+【技術】
+・Meta Graph API（Instagram / Facebook）
+・Django（API連携のハブ）
+・Supabase（顧客データとの紐づけ）
+```
+
 ---
 
 ## 職種別・業種別の恩恵
 
-### 飲食店
+### 飲食店（モジュール A + C + E + F）
 
 | 機能 | 効果 |
 |---|---|
 | モバイルオーダー | 注文受付の省力化、回転率向上 |
 | 事前決済 | レジ待ち解消、会計ミスゼロ |
 | クーポン配布 | リピート促進、客単価向上 |
-| 来店リマインド | 予約キャンセル率低下 |
+| Instagram連携 | 新メニュー告知、集客 |
 
-### 小売・アパレル
+### 小売・アパレル（モジュール A + D-2 + E + F）
 
 | 機能 | 効果 |
 |---|---|
 | デジタル会員証 | 紙カード廃止、顧客データ蓄積 |
 | パーソナライズクーポン | 購買履歴に基づいた販促 |
 | 在庫確認アプリ | 取り置き依頼がオンラインで完結 |
-| PWA配布 | アプリストア審査なしで即提供 |
+| Instagram連携 | 新商品告知、コーディネート提案 |
 
-### 歯科・医療
+### 歯科・医療（モジュール B + C + D-1）
 
 | 機能 | 効果 |
 |---|---|
@@ -237,16 +347,16 @@ Diamond → 蓄積データから次の一手を見つける
 | 問診AI | 来院前に情報収集、診療効率化 |
 | リコール自動化 | 定期検診の来院促進 |
 
-### 美容・サービス
+### 美容・サービス（モジュール B + C + D-1 + F）
 
 | 機能 | 効果 |
 |---|---|
 | 予約システム | ダブルブッキング防止 |
 | 施術履歴管理 | 顧客ごとの好み把握 |
 | 次回来店提案 | AIが最適な来店タイミングを提案 |
-| ポイント・クーポン | リピート率向上 |
+| Instagram連携 | 施術事例の発信、集客 |
 
-### 自動車整備
+### 自動車整備（モジュール B + C + D-1）
 
 | 機能 | 効果 |
 |---|---|
@@ -274,7 +384,7 @@ Diamond → 蓄積データから次の一手を見つける
 
 【新規顧客獲得】
 ・PWAでQRコード一発配布
-・SNS連携による口コミ
+・Instagram / Facebook連携による集客
 ・友達紹介クーポン
 ```
 
@@ -297,6 +407,7 @@ Diamond → 蓄積データから次の一手を見つける
 ```
 ・顧客データの蓄積（購買履歴、来店頻度）
 ・効果測定（クーポン利用率、リピート率）
+・SNSのインサイト（投稿効果、フォロワー推移）
 ・データに基づいた意思決定
 ```
 
@@ -314,37 +425,87 @@ Celery + Redis         ... バックグラウンド処理・スケジュール
 GitHub Codespaces      ... 開発環境
 GitHub Copilot         ... AI伴走開発
 
-【プラチナで追加】
-Stripe                 ... 決済
-Twilio / SendGrid      ... SMS/メール通知
-LIFF (LINE)            ... LINEミニアプリ（最小限JS）
-Claude API             ... AIパーソナライズ
-Supabase pgvector      ... AI用ベクトル検索
+【プラチナで追加（選択モジュールに応じて）】
+Google AI Studio       ... AIプロンプト設計（共通基盤）
+Stripe                 ... 決済（モジュールA）
+Twilio / SendGrid      ... SMS/メール通知（モジュールB）
+LIFF (LINE)            ... LINEミニアプリ（モジュールC）
+AppSheet + Gemini      ... ノーコードAI（モジュールD-1）
+Claude API / Gemini API... AI API（モジュールD-2）
+Supabase pgvector      ... AI用ベクトル検索（モジュールD-2）
+Service Worker         ... PWA強化（モジュールE）
+Meta Graph API         ... Instagram / Facebook連携（モジュールF）
 ```
 
 ### 技術の追加マトリクス
 
-| カテゴリ | 技術 | 役割 | 学習時間目安 |
+| モジュール | 技術 | 役割 | 学習時間目安 |
 |---|---|---|---|
-| **決済** | Stripe | オンライン決済 | 8〜12時間 |
-| **通知** | Twilio / SendGrid | SMS/メール自動送信 | 6〜8時間 |
-| **LINE** | LIFF + Messaging API | LINEミニアプリ | 12〜18時間 |
-| **AIプロト** | Google AI Studio | プロンプト設計・コード生成 | 2〜4時間 |
-| **AI** | Claude API / Gemini API | 対話AI、パーソナライズ | 10〜12時間 |
-| **RAG** | pgvector | FAQ検索、知識ベース | 8〜12時間 |
+| **共通** | Google AI Studio | プロンプト設計・テスト | 2〜4時間 |
+| **A: 決済** | Stripe | オンライン決済 | 8〜12時間 |
+| **B: 通知** | Twilio / SendGrid | SMS/メール自動送信 | 6〜8時間 |
+| **C: LINE** | LIFF + Messaging API | LINEミニアプリ | 12〜18時間 |
+| **D-1: AI（ノーコード）** | AppSheet + Gemini | ノーコードAI実装 | 6〜10時間 |
+| **D-2: AI（コード）** | Claude API / Gemini API + pgvector | カスタムAI実装 | 12〜16時間 |
+| **E: PWA** | Service Worker + Web Push | アプリ体験の強化 | 4〜6時間 |
+| **F: SNS** | Meta Graph API | Instagram / Facebook連携 | 8〜12時間 |
 
 ```
 → すべての技術がシルバー・ゴールドの知識を100%活用
 → Django + HTMX + Supabase の構成は変わらない
 → 追加するのは「顧客との接点」を作る技術のみ
-→ LIFFのみ最小限のJavaScript（LIFF SDK初期化）
+→ 自社に必要なモジュールだけを学ぶ
 ```
 
 ---
 
-## 各技術の詳細
+## 共通基盤の詳細
 
-### Stripe（決済）
+### 顧客データベース設計（6〜8時間）
+
+```
+・顧客テーブルの設計（Django ORM）
+・購買履歴・来店履歴の管理
+・セグメント（顧客グループ分け）
+・Django Admin での顧客管理画面
+
+目標: 顧客データを適切に管理できるDB設計
+```
+
+### Google AI Studio（2〜4時間）
+
+```
+【Google AI Studioとは】
+ブラウザ上でAIのプロンプトを試作・テストできる無料ツール
+→ プログラミング前にAIの挙動を確認できる
+→ モジュールD-1（AppSheet）にもD-2（Django）にも活きる
+
+┌─────────────────────────────────────────────────────┐
+│ Google AI Studio（ブラウザ）                        │
+│                                                     │
+│ 1. プロンプトを作成・調整                          │
+│ 2. 画像・PDF・テキストで動作確認                   │
+│ 3. 最適なプロンプトを完成させる                    │
+└─────────────────────────────────────────────────────┘
+          ↓ 完成したプロンプトを…
+
+【D-1を選んだ場合】         【D-2を選んだ場合】
+AppSheet + Gemini に設定     「Get Code」→ Django に実装
+
+学習内容:
+・プロンプトの基本（指示の書き方）
+・マルチモーダル（画像、PDF、音声）の動作確認
+・トークン数とコストの把握
+・プロンプトの改善手法
+
+目標: AIに適切な指示を出せるようになる
+```
+
+---
+
+## 選択モジュールの詳細
+
+### モジュールA：決済 - Stripe（8〜12時間）
 
 ```python
 # views.py - Stripe決済セッションの作成
@@ -390,13 +551,18 @@ def stripe_webhook(request):
 ```
 
 ```
-【対象業種】
-・飲食店（モバイルオーダー）
-・小売（ECサイト）
-・サービス業（事前決済）
+学習内容:
+・Stripeアカウント作成と設定
+・Checkout Session（決済ページ）
+・Webhookによる決済完了通知
+・返金処理
+・サブスクリプション（月額課金）
+
+対象業種: 飲食店、小売、EC、サービス業
+目標: オンライン決済を実装できる
 ```
 
-### Twilio / SendGrid（通知）
+### モジュールB：通知 - Twilio / SendGrid（6〜8時間）
 
 ```python
 # tasks.py - Celeryでリマインド送信
@@ -425,33 +591,18 @@ app.conf.beat_schedule = {
 }
 ```
 
-```python
-# SendGrid でメール送信
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+```
+学習内容:
+・SMS送信（Twilio）
+・メール送信（SendGrid）
+・予約リマインドの自動化
+・Celery Beatでのスケジュール実行
 
-def send_email_notification(to_email, subject, content):
-    """メール通知を送信"""
-    message = Mail(
-        from_email=settings.FROM_EMAIL,
-        to_emails=to_email,
-        subject=subject,
-        html_content=content
-    )
-
-    sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
-    response = sg.send(message)
-    return response.status_code
+対象業種: 歯科・医療、自動車整備、美容
+目標: 顧客への自動通知を実装できる
 ```
 
-```
-【対象業種】
-・歯科・医療（予約リマインド）
-・自動車整備（車検通知）
-・美容（次回来店提案）
-```
-
-### LIFF（LINEミニアプリ）
+### モジュールC：LINE - LIFF + Messaging API（12〜18時間）
 
 ```
 【LIFF = LINE Front-end Framework】
@@ -459,7 +610,7 @@ def send_email_notification(to_email, subject, content):
 LINEアプリ内でWebページを表示する仕組み
 → 顧客はLINEを開くだけで予約・会員証が使える
 
-┌─────────────────────────────────────┐
+┌─────────────────────────────────┐
 │ LINE アプリ                        │
 │ ┌─────────────────────────────────┐│
 │ │ LIFF（Django + HTMXアプリ）    ││
@@ -467,7 +618,7 @@ LINEアプリ内でWebページを表示する仕組み
 │ │ ・会員証表示                   ││
 │ │ ・クーポン一覧                 ││
 │ └─────────────────────────────────┘│
-└─────────────────────────────────────┘
+└─────────────────────────────────┘
           ↓ API
     Django（バックエンド）
           ↓
@@ -500,96 +651,56 @@ LINEアプリ内でWebページを表示する仕組み
 </html>
 ```
 
-```python
-# views.py - LIFF用のビュー
-from django.shortcuts import render
-from django.conf import settings
-import requests
+```
+学習内容:
+・LINE Developersアカウント設定
+・LIFF SDKの導入（最小限JS）
+・LINEログイン連携
+・LINE公式アカウントとの統合
+・顧客向けUI（予約、会員証、クーポン）
+・Django + HTMXでほぼ全てを実装
 
-def liff_reservation(request):
-    """LIFF予約画面"""
-    return render(request, 'liff/reservation.html', {
-        'liff_id': settings.LIFF_ID
-    })
-
-def get_line_profile(access_token):
-    """LINEプロフィールを取得"""
-    headers = {'Authorization': f'Bearer {access_token}'}
-    response = requests.get(
-        'https://api.line.me/v2/profile',
-        headers=headers
-    )
-    return response.json()  # {'userId': '...', 'displayName': '山田太郎', ...}
+対象業種: 顧客接点が必要な全業種（日本国内）
+目標: LINE上で動作する顧客向けアプリを作れる
 ```
 
-```html
-<!-- templates/liff/reservation.html -->
-{% extends "liff_base.html" %}
-{% block title %}予約{% endblock %}
-
-{% block content %}
-<div class="container">
-    <h1>予約フォーム</h1>
-
-    <!-- HTMXで動的に更新（JavaScript不要）-->
-    <form hx-post="{% url 'create_reservation' %}"
-          hx-target="#result"
-          hx-swap="innerHTML">
-        {% csrf_token %}
-
-        <label>日付</label>
-        <input type="date" name="date" required>
-
-        <label>時間</label>
-        <select name="time"
-                hx-get="{% url 'available_times' %}"
-                hx-trigger="change from:[name=date]"
-                hx-include="[name=date]">
-            <option>日付を選択してください</option>
-        </select>
-
-        <button type="submit">予約する</button>
-    </form>
-
-    <div id="result"></div>
-</div>
-{% endblock %}
-```
+### モジュールD-1：AI実装（ノーコード）- AppSheet + Gemini（6〜10時間）
 
 ```
-【シルバー・ゴールドとの相性】
-・Django + HTMXのコードをほぼそのまま使用
-・Supabaseとの連携も変更なし
-・追加するのはLIFF SDKの初期化のみ（最小限JS）
-```
-
-### Google AI Studio（AIプロトタイピング）
-
-```
-【Google AI Studioとは】
-ブラウザ上でAIのプロンプトを試作・テストできる無料ツール
-→ プログラミング前にAIの挙動を確認できる
-→ 「Get Code」ボタンでPythonコードを自動生成
-→ そのままDjangoに貼り付けて使える
+【AppSheet + Gemini とは】
+Google AI Studio で設計したプロンプトを、
+AppSheet上でノーコードでAI機能として実装する方法
 
 ┌─────────────────────────────────────────────────────┐
-│ Google AI Studio（ブラウザ）                        │
-│                                                     │
-│ 1. プロンプトを作成・調整                          │
-│ 2. 画像・PDF・テキストで動作確認                   │
-│ 3. 「Get Code」をクリック                          │
-│    ↓                                               │
-│ Python コードが自動生成                            │
-│ （Gemini API呼び出しコード）                       │
+│ Google AI Studio（共通基盤で習得済み）              │
+│ → プロンプトの設計・テスト                         │
 └─────────────────────────────────────────────────────┘
-                    ↓ コピー&ペースト
+          ↓ 設計したプロンプトを活用
 ┌─────────────────────────────────────────────────────┐
-│ Django views.py                                     │
-│ ・API キーを環境変数に設定                         │
-│ ・生成されたコードをビューに配置                   │
-│ ・完成                                             │
+│ AppSheet + Gemini                                   │
+│ ・画像からのテキスト抽出（OCR）                    │
+│ ・問い合わせの自動分類                              │
+│ ・センチメント分析                                  │
+│ ・商品説明文の自動生成                              │
+│ → すべて設定画面から、コード不要                   │
 └─────────────────────────────────────────────────────┘
+          ↓ データは
+┌─────────────────────────────────────────────────────┐
+│ Supabase（PostgreSQL）                              │
+│ → AppSheetからCloud Database接続で直接読み書き     │
+└─────────────────────────────────────────────────────┘
+
+学習内容:
+・AppSheet + Gemini の連携設定
+・画像分類・テキスト抽出の設定
+・自動分類・センチメント分析
+・Supabaseとの接続（Cloud Database）
+
+対象: カスタマイズ不要な定型的AI機能
+目標: コードを書かずにAI機能を導入できる
 ```
+
+### モジュールD-2：AI実装（コード）- Django + AI APIs（12〜16時間）
 
 ```python
 # Google AI Studio の「Get Code」で生成されるコード例
@@ -610,26 +721,8 @@ def analyze_receipt(image_path):
     return response.text
 ```
 
-```
-【AI Studio活用のメリット】
-・プロンプトの試行錯誤がコード不要でできる
-・マルチモーダル（画像、PDF、音声）の動作確認
-・トークン数とコストの事前把握
-・Get Code → Django への最短ルート
-
-【カリキュラムでの位置づけ】
-・第5部（AIパーソナライズ）の導入として使用
-・まずAI Studioでプロンプトを完成させる
-・動作確認後、Get CodeでDjangoに実装
-・Claude API / Gemini API どちらも同じ流れで使える
-```
-
----
-
-### Claude API（AIパーソナライズ）
-
 ```python
-# views.py - AIパーソナライズ
+# views.py - AIパーソナライズ（Claude API）
 import anthropic
 from django.conf import settings
 
@@ -637,13 +730,11 @@ client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
 
 def get_personalized_recommendation(customer):
     """購買履歴に基づいたおすすめ提案"""
-    # 顧客の購買履歴を取得
     purchase_history = customer.purchases.order_by('-date')[:10]
     history_text = '\n'.join([
         f"- {p.product.name}（{p.date}）" for p in purchase_history
     ])
 
-    # 在庫情報を取得
     available_products = Product.objects.filter(stock__gt=0)[:20]
     products_text = '\n'.join([
         f"- {p.name}（{p.price}円）" for p in available_products
@@ -693,13 +784,32 @@ def chatbot_response(request):
 ```
 
 ```
-【AIの役割】
-・判断の補助（完全自動化ではない）
-・人間のバックアップ付きで運用
-・複雑な問い合わせはスタッフにエスカレーション
+学習内容:
+・Google AI Studio「Get Code」→ Django に実装
+・Claude API / Gemini API の基本（Pythonで呼び出し）
+・顧客対応チャットボット
+・購買履歴に基づくおすすめ提案
+・画像・PDF分析（レシート読み取り等）
+・Supabase pgvector でFAQ検索（RAG基礎）
+
+【学習フロー】
+1. AI Studio でプロンプトを試作（共通基盤で習得済み）
+2. 「Get Code」でPythonコード取得
+3. Django views.py に実装
+4. HTMX でUI連携
+
+【D-1との違い】
+D-1（AppSheet）: 設定だけ → 手軽だがカスタマイズに限界
+D-2（Django）:   コードで実装 → 自由度が圧倒的に高い
+  ・複数のAI（Claude + Gemini）を使い分け可能
+  ・RAG（知識ベース検索）が可能
+  ・独自のビジネスロジックと組み合わせ可能
+
+対象: チャットボット、RAG、パーソナライズなどカスタムAI
+目標: AIを活用した顧客体験の向上
 ```
 
-### PWA（Progressive Web App）
+### モジュールE：PWA強化（4〜6時間）
 
 ```
 【PWAとは】
@@ -752,134 +862,94 @@ self.addEventListener('fetch', (event) => {
 });
 ```
 
----
+```
+学習内容:
+・Service Workerの詳細
+・オフライン対応
+・プッシュ通知（Web Push API）
+・インストールバナーの最適化
 
-## オプション：SNS連携（Meta Graph API）
+対象業種: アプリ配布が必要な業種全般
+目標: アプリライクな体験を提供できる
+```
 
-### 概要
+### モジュールF：SNS連携 - Meta Graph API（8〜12時間）
 
 ```
-【注意】
-Meta連携は審査プロセスやコンプライアンス対応が必要なため、
-プラチナの「オプション」として位置づけます。
-
 【できること】
-・Instagram投稿の自動管理
-・広告効果の測定
+・Instagram投稿の管理・予約投稿
+・Facebook ページの管理
+・広告効果の測定（インサイト取得）
 ・カスタムオーディエンス（類似顧客への広告）
-・DMの一元管理
-```
+・DM・コメントの一元管理
 
-### 必要な準備
-
-```
-・Meta Business Suiteアカウント
-・Metaアプリの作成とApp Review
-・ビジネス認証（Marketing API使用時）
-・プライバシーポリシーの整備
-```
-
-### 技術構成
-
-```
+【技術構成】
 Meta Graph API       ... 投稿管理、インサイト取得
 Meta Marketing API   ... 広告管理、オーディエンス同期
 Django Views         ... API連携のハブ
 Supabase            ... 顧客データとの紐づけ
 ```
 
+```python
+# views.py - Instagram投稿の取得
+import requests
+from django.conf import settings
+
+def get_instagram_insights(request):
+    """Instagram投稿のインサイトを取得"""
+    access_token = settings.META_ACCESS_TOKEN
+    ig_user_id = settings.INSTAGRAM_BUSINESS_ACCOUNT_ID
+
+    # 最近の投稿を取得
+    url = f"https://graph.facebook.com/v18.0/{ig_user_id}/media"
+    params = {
+        'fields': 'id,caption,timestamp,like_count,comments_count',
+        'access_token': access_token,
+        'limit': 10
+    }
+    response = requests.get(url, params=params)
+    posts = response.json().get('data', [])
+
+    return render(request, 'sns/insights.html', {'posts': posts})
+
+def sync_customers_to_audience(request):
+    """顧客リストをMeta広告のカスタムオーディエンスに同期"""
+    customers = Customer.objects.filter(email__isnull=False)
+    # Meta Marketing API でオーディエンス更新
+    # → 既存顧客に似た新規顧客へ広告配信
+    pass
+```
+
+```
+学習内容:
+・Meta Business Suiteアカウント設定
+・Instagram Graph API の基本
+・投稿管理・インサイト取得
+・カスタムオーディエンス（広告）
+・DM一元管理
+
+必要な準備:
+・Meta Business Suiteアカウント
+・Metaアプリの作成とApp Review
+・ビジネス認証（Marketing API使用時）
+・プライバシーポリシーの整備
+
+対象業種: 飲食店、美容、アパレル、カフェ
+目標: SNSデータとSupabaseを連携し、集客を効率化
+```
+
 ---
 
-## カリキュラム構成
-
-### 第1部：顧客データベースの設計（6〜8時間）
-
-```
-・顧客テーブルの設計（Django ORM）
-・購買履歴・来店履歴の管理
-・セグメント（顧客グループ分け）
-・Django Admin での顧客管理画面
-
-目標: 顧客データを適切に管理できるDB設計
-```
-
-### 第2部：決済連携 - Stripe（8〜12時間）
-
-```
-・Stripeアカウント作成と設定
-・Checkout Session（決済ページ）
-・Webhookによる決済完了通知
-・返金処理
-・サブスクリプション（月額課金）
-
-目標: オンライン決済を実装できる
-```
-
-### 第3部：自動通知 - Twilio / SendGrid（6〜8時間）
-
-```
-・SMS送信（Twilio）
-・メール送信（SendGrid）
-・予約リマインドの自動化
-・Celery Beatでのスケジュール実行
-
-目標: 顧客への自動通知を実装できる
-```
-
-### 第4部：LINEミニアプリ - LIFF（12〜18時間）
-
-```
-・LINE Developersアカウント設定
-・LIFF SDKの導入（最小限JS）
-・LINEログイン連携
-・LINE公式アカウントとの統合
-・顧客向けUI（予約、会員証、クーポン）
-・Django + HTMXでほぼ全てを実装
-
-目標: LINE上で動作する顧客向けアプリを作れる
-```
-
-### 第5部：AIパーソナライズ - Claude API / Gemini API（12〜16時間）
-
-```
-・Google AI Studioでプロンプト設計・テスト
-・「Get Code」でPythonコード生成 → Djangoに実装
-・Claude API / Gemini APIの基本（Pythonで呼び出し）
-・顧客対応チャットボット
-・購買履歴に基づくおすすめ提案
-・画像・PDF分析（レシート読み取り等）
-・Supabase pgvector でFAQ検索（RAG基礎）
-
-目標: AIを活用した顧客体験の向上
-
-【学習フロー】
-1. AI Studio でプロンプトを試作（コード不要）
-2. 動作確認・調整
-3. Get Code でPythonコード取得
-4. Django views.py に実装
-5. HTMX でUI連携
-```
-
-### 第6部：PWA強化（4〜6時間）
-
-```
-・Service Workerの詳細
-・オフライン対応
-・プッシュ通知（Web Push API）
-・インストールバナーの最適化
-
-目標: アプリライクな体験を提供できる
-```
-
-### 第7部：本番品質と監視（4〜6時間）
+## 共通：本番品質と監視（4〜6時間）
 
 ```
 ・エラートラッキング（Sentry）
   → 本番でエラーが起きたらSlack通知
   → 顧客体験に影響するエラーを即座に検知
-・決済のテスト
-  → Stripeテストモードでの結合テスト
-  → 決済フローの異常系テスト
+・選択モジュールに応じたテスト
+  → Stripeテストモード（モジュールA選択時）
+  → SMS送信テスト（モジュールB選択時）
+  → LIFF動作確認（モジュールC選択時）
 ・品質レポートの自動生成
   → AIに「今週の品質サマリーを作成して」
   → テストカバレッジの推移
@@ -892,14 +962,27 @@ Supabase            ... 顧客データとの紐づけ
 目標: 顧客が安心して使えるアプリを維持できる
 ```
 
-### 第8部：実践プロジェクト（15〜20時間）
+---
+
+## 共通：実践プロジェクト（15〜20時間）
 
 ```
-・自社の顧客向けアプリを開発
-・決済 or 予約 or 会員証から1つ選択
-・LINEミニアプリ or PWAで提供
+・選択したモジュールを組み合わせて自社アプリを開発
 ・実際の顧客に使用開始
 ・効果測定と改善
+
+【プロジェクト例】
+歯科（B+C+D-1）:
+  LINE予約 + 自動リマインド + 問診AI
+
+飲食店（A+C+E+F）:
+  モバイルオーダー + LINE + PWA + Instagram集客
+
+小売（A+D-2+E+F）:
+  EC + AIレコメンド + PWA + Instagram連携
+
+美容（B+C+D-1+F）:
+  LINE予約 + 来店リマインド + 施術提案AI + Instagram
 
 目標: 実際に顧客が使うアプリを完成させる
 ```
@@ -908,66 +991,86 @@ Supabase            ... 顧客データとの紐づけ
 
 ## 学習時間の目安
 
-| 部 | 内容 | 目安時間 |
-|---|---|---|
-| 第1部 | 顧客データベース設計 | 6〜8時間 |
-| 第2部 | 決済連携（Stripe） | 8〜12時間 |
-| 第3部 | 自動通知（Twilio/SendGrid） | 6〜8時間 |
-| 第4部 | LINEミニアプリ（LIFF） | 12〜18時間 |
-| 第5部 | AIパーソナライズ | 12〜16時間 |
-| 第6部 | PWA強化 | 4〜6時間 |
-| 第7部 | 本番品質と監視 | 4〜6時間 |
-| 第8部 | 実践プロジェクト | 15〜20時間 |
-| **合計** | | **67〜94時間** |
+### 共通部分（全員）
 
-```
-週5時間ペース → 約3.5〜5ヶ月
-週10時間ペース → 約2〜2.5ヶ月
-```
-
-### オプション
-
-| 項目 | 目安時間 |
+| 内容 | 目安時間 |
 |---|---|
-| Meta連携（SNS） | 16〜24時間 |
+| 顧客データベース設計 | 6〜8時間 |
+| Google AI Studio | 2〜4時間 |
+| 本番品質と監視 | 4〜6時間 |
+| 実践プロジェクト | 15〜20時間 |
+| **共通小計** | **27〜38時間** |
+
+### 選択モジュール
+
+| モジュール | 目安時間 |
+|---|---|
+| A: 決済（Stripe） | 8〜12時間 |
+| B: 通知（Twilio / SendGrid） | 6〜8時間 |
+| C: LINE（LIFF） | 12〜18時間 |
+| D-1: AI（AppSheet + Gemini） | 6〜10時間 |
+| D-2: AI（Django + AI APIs） | 12〜16時間 |
+| E: PWA強化 | 4〜6時間 |
+| F: SNS連携（Meta） | 8〜12時間 |
+
+### 業種別の合計時間例
+
+| 業種 | モジュール | 共通 + 選択 |
+|---|---|---|
+| 歯科（B+C+D-1） | 24〜36時間 | **51〜74時間** |
+| 飲食店（A+C+E+F） | 32〜48時間 | **59〜86時間** |
+| 小売（A+D-2+E+F） | 32〜46時間 | **59〜84時間** |
+| 美容（B+C+D-1+F） | 32〜48時間 | **59〜86時間** |
+| 製造業（D-2のみ） | 12〜16時間 | **39〜54時間** |
+
+```
+週5時間ペース → 約2〜4.5ヶ月（選択モジュール数による）
+週10時間ペース → 約1〜2.5ヶ月（選択モジュール数による）
+```
 
 ---
 
 ## コスト構造
 
-### ツール費用
+### ツール費用（選択モジュールに応じて変動）
 
-| 項目 | 月額/費用 |
-|---|---|
-| Supabase（Pro） | $25 |
-| Railway / Render | 無料〜$20 |
-| Stripe | 決済額の3.6% |
-| Twilio SMS | 約¥10/通 |
-| SendGrid | 無料〜$20 |
-| LINE公式アカウント | 無料〜¥5,000 |
-| Claude API | 従量課金（$3-15/100万トークン） |
-| GitHub Copilot Pro | $10 |
-| **合計目安** | **$60〜100 + 従量** |
+| 項目 | 月額/費用 | モジュール |
+|---|---|---|
+| Supabase（Pro） | $25 | 共通 |
+| Railway / Render | 無料〜$20 | 共通 |
+| GitHub Copilot Pro | $10 | 共通 |
+| Google AI Studio | 無料 | 共通 |
+| Stripe | 決済額の3.6% | A |
+| Twilio SMS | 約¥10/通 | B |
+| SendGrid | 無料〜$20 | B |
+| LINE公式アカウント | 無料〜¥5,000 | C |
+| AppSheet | 無料〜$10 | D-1 |
+| Claude API | 従量課金（$3-15/100万トークン） | D-2 |
+| Gemini API | 無料枠あり | D-1, D-2 |
+| Meta Business Suite | 無料（広告費は別途） | F |
+| **共通のみ** | **$35〜55** | |
+| **全モジュール選択時** | **$60〜120 + 従量** | |
 
 ### ROI（投資対効果）
 
 ```
-【コスト例：月額$100（約15,000円）】
+【コスト例：月額$80（約12,000円）】
 
 【効果例】
 ・リピート率5%向上 → 月20人追加来店 × 客単価3,000円 = 60,000円増収
 ・予約リマインドで無断キャンセル50%減 → 月10件 × 5,000円 = 50,000円損失回避
 ・問い合わせAI対応 → 月10時間削減 × 時給1,500円 = 15,000円人件費削減
+・Instagram効果的運用 → 月間フォロワー増加、新規来店5名 = 15,000円増収
 
-→ 月125,000円の効果 vs 月15,000円のコスト
-→ ROI 800%以上
+→ 月140,000円の効果 vs 月12,000円のコスト
+→ ROI 1,000%以上
 ```
 
 ---
 
 ## 注意点・課題
 
-### 1. 決済（Stripe）の注意点
+### 1. 決済（Stripe）の注意点 ─ モジュールA
 
 ```
 ・本番運用にはStripeアカウントの本人確認が必要
@@ -976,7 +1079,7 @@ Supabase            ... 顧客データとの紐づけ
 ・PCI DSSコンプライアンス（Stripeが対応）
 ```
 
-### 2. 通知（Twilio/SendGrid）の注意点
+### 2. 通知（Twilio/SendGrid）の注意点 ─ モジュールB
 
 ```
 ・SMS送信コストの管理
@@ -985,7 +1088,7 @@ Supabase            ... 顧客データとの紐づけ
 ・顧客の同意取得（オプトイン）
 ```
 
-### 3. LINEミニアプリの注意点
+### 3. LINEミニアプリの注意点 ─ モジュールC
 
 ```
 ・LINE公式アカウントの料金プラン確認
@@ -994,13 +1097,24 @@ Supabase            ... 顧客データとの紐づけ
 ・LIFF SDK初期化には最小限JSが必要
 ```
 
-### 4. AIの注意点
+### 4. AIの注意点 ─ モジュールD
 
 ```
 ・AIは間違える（ハルシネーション）
 ・重要な対応は人間のバックアップ付き
 ・顧客データをAIに送る際のプライバシー考慮
 ・API利用料のモニタリング
+・D-1（AppSheet）とD-2（Django）の使い分け判断
+```
+
+### 5. SNS連携の注意点 ─ モジュールF
+
+```
+・Meta App Reviewの審査が必要（数日〜数週間）
+・アクセストークンの有効期限管理
+・APIの利用制限（レートリミット）に注意
+・プライバシーポリシーの整備が必須
+・広告機能利用時はビジネス認証が必要
 ```
 
 ---
@@ -1021,16 +1135,20 @@ Supabase            ... 顧客データとの紐づけ
 ✓ GitHub Codespaces + Copilot
 ✓ pytest（テスト）
 
-【プラチナで追加】
-+ Stripe SDK
-+ Twilio/SendGrid SDK
-+ LIFF SDK（最小限JS）
-+ Claude API
-+ pgvector
+【プラチナで追加（選択モジュールに応じて）】
++ Google AI Studio（共通）
++ Stripe SDK（A）
++ Twilio/SendGrid SDK（B）
++ LIFF SDK（C）
++ AppSheet + Gemini（D-1）
++ Claude API / Gemini API + pgvector（D-2）
++ Service Worker 強化（E）
++ Meta Graph API（F）
 
 → 新しい言語やフレームワークの学び直しは不要
 → 追加するのは「顧客との接点」を作るSDK・APIのみ
 → すべてPythonで完結（LIFFの初期化のみ最小限JS）
+→ 自社に必要なものだけを選んで学ぶ
 ```
 
 ---
@@ -1043,36 +1161,39 @@ Supabase            ... 顧客データとの紐づけ
 「顧客接点・顧客体験の強化」
 〜 お客様がまた来たくなる仕組みを 〜
 
-・顧客向けアプリの提供（LIFF / PWA）
-・決済のキャッシュレス化（Stripe）
-・自動リマインド（Twilio / SendGrid / Celery）
-・パーソナライズ（Claude API）
-・データに基づいた顧客理解
+共通基盤:
+・顧客データベース設計
+・Google AI Studio でプロンプト設計
+
+自社に合わせて選択:
+・決済（Stripe）
+・通知（Twilio / SendGrid）
+・LINE（LIFF）
+・AI（AppSheet + Gemini or Django + AI APIs）
+・PWA強化
+・SNS連携（Meta）
 ```
 
-### 技術スタック
+### ブロンズ〜ゴールドとの違い
 
 ```
-Django + HTMX + Supabase + Celery
-+ Stripe + Twilio/SendGrid + LIFF + Claude API
+ブロンズ〜ゴールド: 全員が全部学ぶ（基礎の土台）
+プラチナ: 自社に必要なものを選んで学ぶ（実践の応用）
 
-・ゴールドまでの技術をすべて継続活用
-・追加するのは「顧客との接点」を作る技術のみ
-・LINEミニアプリ or PWA で顧客にリーチ
-・AIでパーソナライズされた体験を提供
-・LIFFのみ最小限のJavaScript
+→ 業種・職種・顧客特性に応じた最適な組み合わせ
+→ 不要なモジュールに時間を使わない
+→ 「作ることを目的にしない」思想の体現
 ```
 
 ### 期待される成果
 
 ```
 プラチナ修了者は:
-・顧客向けアプリ（LINE/PWA）を作れる
-・オンライン決済を実装できる
-・自動通知・リマインドを構築できる
-・AIを活用した顧客体験向上ができる
-・顧客データを活用したマーケティングができる
+・自社に必要な顧客接点の技術を選択・導入できる
+・Google AI Studio でAIプロンプトを設計できる
+・選択したモジュールを組み合わせた顧客向けアプリを構築できる
 ・本番環境の品質を監視・維持できる
+・SNSとシステムを連携した集客ができる
 
 → 中小企業の「顧客体験」を変革できる人材
 → 「お客様がまた来たくなる」仕組みを構築できる
@@ -1088,10 +1209,14 @@ Django + HTMX + Supabase + Celery
 ```
 【蓄積データ】
 ・売上、在庫、勤怠（シルバー・ゴールド）
-・顧客データ、購買履歴、来店頻度（プラチナ）
-・決済データ、通知の開封率・効果（プラチナ）
-・問い合わせ内容、対応履歴（プラチナ）
+・顧客データ、購買履歴、来店頻度（プラチナ共通）
+・決済データ（モジュールA選択時）
+・通知の開封率・効果（モジュールB選択時）
+・LINE利用データ（モジュールC選択時）
+・AI対応履歴（モジュールD選択時）
+・SNSインサイト（モジュールF選択時）
 
+→ 選択したモジュールに応じてデータが蓄積される
 → これらのデータが「宝の山」として眠っている
 → ダイヤモンドで分析力を加え、事業価値に変える
 ```
@@ -1101,8 +1226,8 @@ Django + HTMX + Supabase + Celery
 ```
 【プラチナで習得】
 ・顧客データの設計と蓄積
-・Claude APIの活用
-・pgvector（ベクトル検索）
+・AI Studio でのプロンプト設計
+・各種API連携のスキル
 
     ↓ そのまま活きる
 
@@ -1122,41 +1247,58 @@ Django + HTMX + Supabase + Celery
 
 ### 事前準備（ゴールド修了後）
 - [ ] 顧客向けアプリの要件整理
-- [ ] Stripeアカウント作成
-- [ ] Twilioアカウント作成
-- [ ] LINE Developersアカウント作成
-- [ ] LINE公式アカウント作成
+- [ ] 業種・顧客特性に基づくモジュール選定
+- [ ] 選択フローチャートでモジュール確定
 
-### 第1〜3部（決済・通知）
+### 共通基盤
 - [ ] 顧客データベースの設計（Django ORM）
-- [ ] Stripe Checkoutの実装
+- [ ] Google AI Studio でプロンプト設計の練習
+
+### モジュールA（決済）選択時
+- [ ] Stripeアカウント作成
+- [ ] Checkout Sessionの実装
 - [ ] Webhook（決済完了通知）の実装
+
+### モジュールB（通知）選択時
+- [ ] Twilioアカウント作成
 - [ ] SMS/メール送信の実装
 - [ ] 予約リマインドの自動化（Celery Beat）
 
-### 第4部（LINEミニアプリ）
+### モジュールC（LINE）選択時
+- [ ] LINE Developersアカウント作成
+- [ ] LINE公式アカウント作成
 - [ ] LIFFアプリの作成
 - [ ] LIFF SDK導入（最小限JS）
-- [ ] LINEログイン連携
-- [ ] 顧客向けUI（予約/会員証等）
-- [ ] 公式アカウントとの統合
 
-### 第5部（AI）
-- [ ] Claude APIの導入
+### モジュールD-1（AI・ノーコード）選択時
+- [ ] AppSheet + Gemini の連携設定
+- [ ] AI機能の設定（画像分類、テキスト抽出等）
+- [ ] Supabase との接続設定
+
+### モジュールD-2（AI・コード）選択時
+- [ ] Claude API / Gemini API の導入
 - [ ] 顧客対応チャットボット
 - [ ] おすすめ提案の実装
 - [ ] pgvectorでFAQ検索
 
-### 第6〜7部（PWA・品質）
+### モジュールE（PWA）選択時
 - [ ] Service Workerの強化
+- [ ] オフライン対応
+- [ ] インストールバナーの最適化
+
+### モジュールF（SNS）選択時
+- [ ] Meta Business Suiteアカウント設定
+- [ ] Metaアプリの作成とApp Review
+- [ ] Instagram Graph API の連携
+
+### 本番品質と監視
 - [ ] Sentryの導入
 - [ ] エラー通知の設定（Slack連携）
-- [ ] 決済フローのテスト
-- [ ] 品質レポートの生成
+- [ ] 選択モジュールに応じたテスト
 - [ ] セキュリティチェック
 
 ### 実践プロジェクト
-- [ ] 顧客向けアプリの開発
+- [ ] 選択モジュールを組み合わせたアプリ開発
 - [ ] テスト運用
 - [ ] 実際の顧客への提供開始
 - [ ] 効果測定と改善
