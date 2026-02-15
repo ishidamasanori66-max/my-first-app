@@ -329,7 +329,8 @@ Supabase pgvector      ... AI用ベクトル検索
 | **決済** | Stripe | オンライン決済 | 8〜12時間 |
 | **通知** | Twilio / SendGrid | SMS/メール自動送信 | 6〜8時間 |
 | **LINE** | LIFF + Messaging API | LINEミニアプリ | 12〜18時間 |
-| **AI** | Claude API | 対話AI、パーソナライズ | 12〜16時間 |
+| **AIプロト** | Google AI Studio | プロンプト設計・コード生成 | 2〜4時間 |
+| **AI** | Claude API / Gemini API | 対話AI、パーソナライズ | 10〜12時間 |
 | **RAG** | pgvector | FAQ検索、知識ベース | 8〜12時間 |
 
 ```
@@ -562,6 +563,69 @@ def get_line_profile(access_token):
 ・追加するのはLIFF SDKの初期化のみ（最小限JS）
 ```
 
+### Google AI Studio（AIプロトタイピング）
+
+```
+【Google AI Studioとは】
+ブラウザ上でAIのプロンプトを試作・テストできる無料ツール
+→ プログラミング前にAIの挙動を確認できる
+→ 「Get Code」ボタンでPythonコードを自動生成
+→ そのままDjangoに貼り付けて使える
+
+┌─────────────────────────────────────────────────────┐
+│ Google AI Studio（ブラウザ）                        │
+│                                                     │
+│ 1. プロンプトを作成・調整                          │
+│ 2. 画像・PDF・テキストで動作確認                   │
+│ 3. 「Get Code」をクリック                          │
+│    ↓                                               │
+│ Python コードが自動生成                            │
+│ （Gemini API呼び出しコード）                       │
+└─────────────────────────────────────────────────────┘
+                    ↓ コピー&ペースト
+┌─────────────────────────────────────────────────────┐
+│ Django views.py                                     │
+│ ・API キーを環境変数に設定                         │
+│ ・生成されたコードをビューに配置                   │
+│ ・完成                                             │
+└─────────────────────────────────────────────────────┘
+```
+
+```python
+# Google AI Studio の「Get Code」で生成されるコード例
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+def analyze_receipt(image_path):
+    """レシート画像を分析（AI Studioで調整したプロンプト）"""
+    image = PIL.Image.open(image_path)
+    response = model.generate_content([
+        "このレシート画像から以下を抽出してJSON形式で返してください：\n"
+        "- 店舗名\n- 日付\n- 合計金額\n- 品目リスト",
+        image
+    ])
+    return response.text
+```
+
+```
+【AI Studio活用のメリット】
+・プロンプトの試行錯誤がコード不要でできる
+・マルチモーダル（画像、PDF、音声）の動作確認
+・トークン数とコストの事前把握
+・Get Code → Django への最短ルート
+
+【カリキュラムでの位置づけ】
+・第5部（AIパーソナライズ）の導入として使用
+・まずAI Studioでプロンプトを完成させる
+・動作確認後、Get CodeでDjangoに実装
+・Claude API / Gemini API どちらも同じ流れで使える
+```
+
+---
+
 ### Claude API（AIパーソナライズ）
 
 ```python
@@ -775,15 +839,25 @@ Supabase            ... 顧客データとの紐づけ
 目標: LINE上で動作する顧客向けアプリを作れる
 ```
 
-### 第5部：AIパーソナライズ - Claude API（12〜16時間）
+### 第5部：AIパーソナライズ - Claude API / Gemini API（12〜16時間）
 
 ```
-・Claude APIの基本（Pythonで呼び出し）
+・Google AI Studioでプロンプト設計・テスト
+・「Get Code」でPythonコード生成 → Djangoに実装
+・Claude API / Gemini APIの基本（Pythonで呼び出し）
 ・顧客対応チャットボット
 ・購買履歴に基づくおすすめ提案
+・画像・PDF分析（レシート読み取り等）
 ・Supabase pgvector でFAQ検索（RAG基礎）
 
 目標: AIを活用した顧客体験の向上
+
+【学習フロー】
+1. AI Studio でプロンプトを試作（コード不要）
+2. 動作確認・調整
+3. Get Code でPythonコード取得
+4. Django views.py に実装
+5. HTMX でUI連携
 ```
 
 ### 第6部：PWA強化（4〜6時間）
