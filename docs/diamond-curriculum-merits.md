@@ -55,10 +55,10 @@ Diamond        = デジタルトランスフォーメーション（本来のDX�
 
 | ステージ | 技術スタック | 改善対象 | ゴール |
 |---|---|---|---|
-| ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 |
-| シルバー | Django + HTMX + Supabase + Copilot | 組織の業務プロセス | 業務アプリを自作 |
+| ブロンズ | Python + Pandas + Pydantic + sqlite3 | 個人の業務 | Excel業務の自動化 + データ検証 |
+| シルバー | AppSheet → Django + HTMX + Supabase (JSONB) + Realtime | 組織の業務プロセス | 業務アプリを構築 |
 | ゴールド | + requests/httpx + Celery + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
-| プラチナ | + Stripe + Twilio/SendGrid + LIFF + Claude API | 顧客接点・顧客体験 | 顧客体験の強化 |
+| プラチナ | + 選択モジュール（決済・LINE・AI等） | 顧客接点・顧客体験 | 顧客体験の強化 |
 | **ダイヤモンド** | **+ scikit-learn + Prophet + Streamlit + 画像認識API** | **事業価値の創出** | **データ駆動経営** |
 
 ---
