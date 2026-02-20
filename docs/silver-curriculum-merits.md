@@ -9,55 +9,58 @@
 ## 設計思想
 
 ```
-【ねらい】
-組織の業務プロセス改善
+【コンセプト】
+「Excelを送る業務をなくす」
+〜 組織の業務プロセスをデジタル化 〜
 
-・データ収集からデジタル化（Excelを送る業務をなくす）
+・データ収集からデジタル化
 ・Webアプリで業務フロー全体を改善
 ・リアルタイムでの情報共有・可視化
-・目的に応じて最適な手段を選べる「判断力」の育成
+・プロトタイプで検証 → 本実装へ
 ```
 
-### 2つのアプローチ
-
-シルバーでは、Webアプリを作る **2つの方法** を学びます。
+### 学習の流れ
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                   Webアプリ開発の2つの選択肢                    │
+│                   シルバーの学習ステップ                         │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  【アプローチA】AppSheet + Looker Studio（ノーコード）         │
-│  ・現場ツールを即日導入                                        │
-│  ・バーコード読み取り、承認フローなどが標準装備                │
-│  ・経営ダッシュボードをドラッグ＆ドロップで作成               │
-│  ・コードを書かずに業務効果を素早く実感                        │
+│  【第1部】AppSheet でプロトタイピング                           │
+│  ・ノーコードで素早くアプリを作成                               │
+│  ・データ構造を視覚化して理解                                   │
+│  ・現場で試用してフィードバック収集                             │
 │                                                                 │
-│  【アプローチB】Django + HTMX（コード開発）                    │
-│  ・AppSheetでは実現できない独自ロジック                        │
-│  ・AIレコメンド、複雑な計算、外部API連携                       │
-│  ・顧客向けのブランディングされたUI                            │
-│  ・ブロンズで習得したPythonスキルをフル活用                    │
+│      ↓ プロトタイプで要件が固まったら                          │
 │                                                                 │
-│  【共通】Supabase（データベース）                              │
-│  ・どちらのアプローチでもSupabaseにデータを一元化              │
-│  ・アプローチAからBへの移行がスムーズ                          │
+│  【第2部】ハイブリッドDB実装（Supabase RDB + JSONB）            │
+│  ・リレーショナルDB + 柔軟なJSONB                               │
+│  ・ブロンズで学んだPydanticでデータ検証                         │
+│                                                                 │
+│      ↓ データ基盤が整ったら                                    │
+│                                                                 │
+│  【第3部】Django + HTMX（Webアプリ実装）                        │
+│  ・Pythonで本格的なWebアプリを開発                              │
+│  ・AppSheetでは実現できない独自ロジック                         │
+│                                                                 │
+│      ↓ アプリが動いたら                                        │
+│                                                                 │
+│  【第4部】Supabase Realtime + Looker Studio                     │
+│  ・リアルタイム同期でデータを即時反映                           │
+│  ・経営ダッシュボードで可視化                                   │
+│                                                                 │
+│      ↓ 本番運用に向けて                                        │
+│                                                                 │
+│  【第5部】環境分離と自動化（CI/CD）                             │
+│  ・開発・ステージング・本番の3層分離                            │
+│  ・GitHub Actions で自動テスト・デプロイ                        │
+│                                                                 │
+│      ↓ 実践へ                                                  │
+│                                                                 │
+│  【第6部】実践プロジェクト                                      │
+│  ・自社の業務課題を解決するアプリを完成                         │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
-```
-
-### なぜ2つのアプローチを学ぶのか
-
-```
-【目的】
-「作ること」ではなく「業務効果を出すこと」が目的
-
-【判断できる人材へ】
-・AppSheetで十分なら → 即日リリースして効果を得る
-・AppSheetでは不可能なら → Djangoで開発する
-・効果検証が先なら → AppSheetでプロトタイプ → Djangoで本実装
-
-→ 状況に応じて最適な手段を選べる「指揮能力」を身につける
 ```
 
 ---
@@ -84,11 +87,11 @@
 
 【シルバー】組織の業務プロセス改善
 ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
-│  入力フォーム  │ ──→ │  データベース  │ ──→ │ 分析・可視化  │
-│  （Django）   │      │  （Supabase） │      │ ダッシュボード │
+│ プロトタイプ  │ ──→ │  データベース  │ ──→ │ 本格Webアプリ │
+│  （AppSheet） │      │  （Supabase） │      │ （Django）   │
 └─────────────┘      └─────────────┘      └─────────────┘
     ↑                     ↑                     ↑
-  Web化              Excel脱却              リアルタイム
+  素早く検証           JSONB + RDB          リアルタイム同期
 
     └───────────── 業務プロセス全体を改善 ─────────────┘
 ```
@@ -99,31 +102,58 @@
 
 | ステージ | 技術スタック | 改善対象 | ゴール |
 |---|---|---|---|
-| ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 + SQL習得 |
-| **シルバー** | **AppSheet / Django + HTMX + Supabase + Looker Studio** | **組織の業務プロセス** | **業務アプリを構築** |
-| ゴールド | + 外部API連携 + Celery + PWA | 社内システム全体 | システム統合と自動化 |
-| プラチナ | + Stripe + LIFF + Claude API | 顧客接点・顧客体験 | 顧客体験の強化 |
+| ブロンズ | Python + Pandas + Pydantic + sqlite3 | 個人の業務 | Excel業務の自動化 + データ検証 |
+| **シルバー** | **AppSheet → Django + HTMX + Supabase (JSONB) + Realtime** | **組織の業務プロセス** | **業務アプリを構築** |
+| ゴールド | + 外部API連携 + Celery + PWA基礎 | 社内システム全体 | システム統合と自動化 |
+| プラチナ | + 選択モジュール（決済・LINE・AI等） | 顧客接点・顧客体験 | 顧客体験の強化 |
 | ダイヤモンド | + scikit-learn + Prophet + Streamlit | 事業価値の創出 | データ駆動経営 |
 
 ---
 
 ## ブロンズからの接続
 
-### 言語の継続性（最大のメリット）
+### 言語とスキルの継続性
 
 ```
-【ブロンズ】
+【ブロンズで習得】
 ・Python を使って Excel を自動処理
 ・sqlite3 で SQL の基礎を習得
+・Pydantic でデータ検証（型チェック）
+・JSON でデータ構造を理解
 
-    ↓ 言語が同じまま！
+    ↓ すべてがシルバーで活きる！
 
-【シルバー】
+【シルバーで活用】
 ・Python（Django）を使って Web アプリ開発
 ・Supabase（PostgreSQL）で同じ SQL を活用
+・Pydantic でAPIリクエスト/レスポンスを検証
+・JSONB で柔軟なデータ構造を実現
 
 → 新しい言語を学ばなくてよい
 → ブロンズの知識が100%活きる
+```
+
+### Pydantic の継続活用
+
+```python
+# ブロンズで習得した Pydantic
+from pydantic import BaseModel, field_validator
+
+class 売上データ(BaseModel):
+    店舗名: str
+    日付: str
+    金額: int
+
+    @field_validator('金額')
+    @classmethod
+    def 金額は正の数(cls, v):
+        if v < 0:
+            raise ValueError('金額は0以上')
+        return v
+
+# シルバーでも同じように使える
+# → Django REST API のリクエスト検証
+# → Supabase に保存前のバリデーション
 ```
 
 ### SQLスキルの継続活用
@@ -152,18 +182,6 @@ Sales.objects.raw('''
 → ブロンズで学んだSQLがそのまま使える！
 ```
 
-### ブロンズ修了者の強み
-
-```
-・Pythonの基礎知識がある → Djangoはすべて Python
-・SQLの基本構文を理解している → Django ORM/生SQL で活用
-・テーブル思考（行と列）が身についている → モデル設計に直結
-・AIに質問しながら問題解決できる → GitHub Copilotで継続
-
-→ シルバーでの学習負荷が大幅に軽減
-→ 他言語スタック（React等）と比較して圧倒的に有利
-```
-
 ---
 
 ## 技術スタック
@@ -171,51 +189,55 @@ Sales.objects.raw('''
 ### 全体構成
 
 ```
-【共通基盤】
-Supabase              ... データベース（PostgreSQL）
-GitHub Codespaces     ... 開発環境（Django開発時）
+【プロトタイピング】
+AppSheet              ... ノーコードでプロトタイプ作成
+
+【データベース】
+Supabase              ... PostgreSQL + JSONB + Realtime
+Pydantic              ... データ検証（ブロンズから継続）
+
+【Webアプリ開発】
+Django + HTMX         ... Webアプリケーション
+GitHub Codespaces     ... ブラウザ開発環境
 GitHub Copilot        ... AI伴走
 
-【アプローチA：ノーコード】
-AppSheet              ... 現場向け入力アプリ
+【可視化】
 Looker Studio         ... 経営ダッシュボード
 
-【アプローチB：コード開発】
-Django + HTMX         ... Webアプリケーション
+【運用】
+GitHub Actions        ... CI/CD（自動テスト・デプロイ）
+Railway / Render      ... ホスティング
 ```
 
 ### 各技術の役割
 
-| 技術 | 役割 | アプローチ |
+| 技術 | 役割 | 特徴 |
 |---|---|---|
-| **Supabase** | マネージドPostgreSQL | 共通（データの心臓部） |
-| **AppSheet** | 現場入力アプリ（バーコード、承認等） | A（ノーコード） |
-| **Looker Studio** | ダッシュボード・可視化 | A（ノーコード） |
-| **Django** | Webフレームワーク（Python製） | B（コード開発） |
-| **HTMX** | 動的UI（JSを書かない） | B（コード開発） |
-| **GitHub Codespaces** | ブラウザ開発環境 | B（コード開発） |
-| **GitHub Copilot** | AI伴走 | B（コード開発） |
-
-### データは常にSupabaseに一元化
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Supabase                                │
-│                    （すべてのデータの保存先）                   │
-└─────────────────────────────────────────────────────────────────┘
-        ↑                    ↑                    ↑
-   AppSheet で入力      Django で入力      Looker Studio で可視化
-   （現場スタッフ）    （カスタム機能）    （経営者・管理者）
-
-【メリット】
-・どのツールで入力してもデータは1箇所
-・AppSheet → Django への移行時もデータそのまま
-・分析・可視化が常に最新データ
-```
+| **AppSheet** | プロトタイピング | ノーコードで素早く検証 |
+| **Supabase** | データベース | PostgreSQL + JSONB + Realtime |
+| **Pydantic** | データ検証 | ブロンズから継続、型安全 |
+| **Django** | Webフレームワーク | Python製、Admin自動生成 |
+| **HTMX** | 動的UI | JSを書かずに動的処理 |
+| **Looker Studio** | ダッシュボード | 経営者向け可視化 |
+| **GitHub Actions** | CI/CD | 自動テスト・デプロイ |
 
 ---
 
-## AppSheet + Supabase（アプローチA）
+## 第1部：AppSheet でプロトタイピング
+
+### なぜプロトタイプから始めるか
+
+```
+【従来のアプローチ】
+要件定義 → 設計 → 実装 → テスト → リリース
+→ 「思っていたのと違う」が最後に発覚
+→ 手戻りコストが大きい
+
+【シルバーのアプローチ】
+AppSheet でプロトタイプ → 現場で試用 → フィードバック → Django で本実装
+→ 「思っていたのと違う」が早期に発覚
+→ 本実装前に軌道修正できる
+```
 
 ### AppSheet とは
 
@@ -232,49 +254,145 @@ Googleが提供するノーコード開発プラットフォーム
 ```
 【接続方式】
 AppSheetのデータソース設定で「Cloud Database (PostgreSQL)」を選択し、
-Supabaseの接続情報（ホスト名、ポート、ユーザー名、パスワード）を入力するだけ。
+Supabaseの接続情報（ホスト名、ポート、ユーザー名、パスワード）を入力。
 
-【リアルタイム性】
-AppSheetで入力したデータは、瞬時にSupabaseのテーブルへ書き込まれる。
-
-【移行への備え】
-この構成にしておけば、将来的に「AppSheetでは物足りない」となった際、
-データはすでにSupabaseにあるため、そのままDjangoへ切り替えることが可能。
+【メリット】
+・プロトタイプ段階からSupabaseにデータが蓄積
+・Django移行時にデータ移行不要
+・AppSheetとDjangoの並行運用も可能
 ```
 
-### 接続時の注意点
-
-| 項目 | 設定内容 |
-|---|---|
-| 外部接続の許可 | Supabase側でAppSheetからのアクセスを許可（SSL接続を必須に） |
-| 主キー（Primary Key） | テーブルに `id` カラムを UUID または Serial で作成 |
-| SSL接続 | AppSheetはSSL接続を要求（Supabaseは標準対応） |
-
-### Looker Studio とは
+### プロトタイピングで確認すること
 
 ```
-Googleが提供する無料のBIツール
-・ドラッグ＆ドロップでダッシュボード作成
-・PostgreSQL（Supabase）に直接接続可能
-・経営者が自分で操作できる
-・共有・埋め込みが簡単
+✓ データ構造は適切か（テーブル設計の検証）
+✓ 入力項目は過不足ないか
+✓ 承認フローは業務に合っているか
+✓ 現場スタッフが使いこなせるか
+✓ 本当に必要な機能は何か
+
+→ これらが明確になってからDjango実装へ
 ```
 
-### AppSheet でできること
+### 学習内容（8〜10時間）
 
 ```
-✓ データの入力・閲覧・編集（CRUD）
-✓ 承認ワークフロー
-✓ バーコード・QRコード読み取り
-✓ GPS 位置情報の取得
-✓ 写真撮影・添付
-✓ PDF 生成（テンプレートベース）
-✓ メール通知（基本的なもの）
+・AppSheetアカウント作成
+・Supabase（PostgreSQL）への接続設定
+・日報入力アプリの作成
+・バーコード読み取り、GPS、カメラの活用
+・承認ワークフローの設定
+・現場での試用とフィードバック収集
+
+目標: 1日で現場に投入できるプロトタイプを作る
 ```
 
 ---
 
-## Django + HTMX（アプローチB）
+## 第2部：ハイブリッドDB実装（Supabase RDB + JSONB）
+
+### なぜハイブリッドDBか
+
+```
+【従来の選択肢】
+リレーショナルDB（PostgreSQL）: 構造が固定、変更が大変
+ドキュメントDB（MongoDB等）: 柔軟だが集計が苦手
+
+【ハイブリッドDB】
+PostgreSQL の JSONB カラム
+= リレーショナル + ドキュメントの良いとこ取り
+
+・コアデータ: 通常カラム（厳格に管理）
+・拡張データ: JSONB カラム（柔軟に対応）
+```
+
+### 具体例：顧客管理
+
+```sql
+-- テーブル設計
+CREATE TABLE customers (
+    -- コアデータ（変更されにくい、集計に使う）
+    id UUID PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT,
+    created_at TIMESTAMP DEFAULT NOW(),
+
+    -- 拡張データ（業種により異なる、柔軟に追加）
+    metadata JSONB DEFAULT '{}'
+);
+
+-- 歯科の場合
+UPDATE customers SET metadata = '{
+    "担当医": "山田",
+    "次回予約": "2026-03-15",
+    "治療履歴": ["虫歯治療", "クリーニング"]
+}' WHERE id = '...';
+
+-- 小売の場合
+UPDATE customers SET metadata = '{
+    "会員ランク": "ゴールド",
+    "ポイント": 1500,
+    "お気に入り": ["商品A", "商品B"]
+}' WHERE id = '...';
+
+-- コアデータは通常のSQLで集計
+SELECT COUNT(*) FROM customers WHERE created_at > '2026-01-01';
+
+-- 拡張データもSQLで検索可能
+SELECT * FROM customers WHERE metadata->>'会員ランク' = 'ゴールド';
+```
+
+### Pydantic でデータ検証
+
+```python
+# ブロンズで学んだPydanticをそのまま活用
+from pydantic import BaseModel
+from typing import Optional, Any
+
+class CustomerBase(BaseModel):
+    """コアデータ（厳格に検証）"""
+    name: str
+    email: Optional[str] = None
+
+class CustomerMetadata(BaseModel):
+    """拡張データ（柔軟だが型チェック）"""
+    担当医: Optional[str] = None
+    会員ランク: Optional[str] = None
+    ポイント: Optional[int] = None
+
+class Customer(CustomerBase):
+    metadata: CustomerMetadata = CustomerMetadata()
+
+# Django views.py で使用
+def create_customer(request):
+    data = json.loads(request.body)
+
+    # Pydantic でバリデーション
+    customer = Customer(**data)  # 不正データはここでエラー
+
+    # Supabase に保存
+    Customer.objects.create(
+        name=customer.name,
+        email=customer.email,
+        metadata=customer.metadata.model_dump()
+    )
+```
+
+### 学習内容（6〜8時間）
+
+```
+・JSONB の概念と使い方
+・コアデータと拡張データの設計判断
+・Pydantic との組み合わせ（ブロンズ復習）
+・JSONB の検索・更新クエリ
+・インデックス設計
+
+目標: 柔軟かつ堅牢なデータベースを設計できる
+```
+
+---
+
+## 第3部：Django + HTMX（Webアプリ実装）
 
 ### Django + HTMX の威力
 
@@ -310,23 +428,7 @@ async function fetchData() {
 → JavaScriptの学習が不要
 ```
 
-### Webアプリで実現できること
-
-| 機能 | 説明 |
-|---|---|
-| データ入力 | Djangoフォームから直接入力 |
-| データ表示 | 一覧表示、検索、フィルタ |
-| データ分析 | Django ORM / 生SQL で集計・抽出 |
-| データ可視化 | Chart.js等でグラフ・ダッシュボード |
-| 印刷・出力 | ブラウザ印刷、PDF生成 |
-| 認証・権限 | Django標準の認証システム |
-| 管理画面 | Django Admin（自動生成） |
-
----
-
-## Django Admin の威力
-
-### 管理画面が自動生成される
+### Django Admin の威力
 
 ```python
 # models.py
@@ -335,6 +437,7 @@ class Order(models.Model):
     商品 = models.CharField(max_length=200)
     数量 = models.IntegerField()
     金額 = models.IntegerField()
+    metadata = models.JSONField(default=dict)  # JSONB
     作成日 = models.DateTimeField(auto_now_add=True)
 
 # admin.py
@@ -351,136 +454,107 @@ admin.site.register(Order)
 # - すべて自動生成
 ```
 
-### React版との比較
+### 学習内容（12〜16時間）
 
 ```
-【React + Supabase】
-  管理画面 → 自分で作る必要あり
-  認証機能 → Supabase Authを設定
-  CRUD画面 → すべて自分で実装
+・GitHubアカウント・リポジトリ作成
+・Codespacesの起動と操作
+・GitHub Copilot の有効化と使い方
+・Django プロジェクトの作成
+・Supabase（PostgreSQL + JSONB）への接続
+・モデル設計（Django ORM + JSONField）
+・CRUD操作（作成・読取・更新・削除）
+・Django Admin の活用
+・Django 標準認証（ログイン・ログアウト）
+・フォーム作成（入力、バリデーション）
+・HTMX で動的UI
 
-【Django + HTMX】
-  管理画面 → Admin で自動生成
-  認証機能 → Django 標準で組み込み済み
-  CRUD画面 → 基本は Admin で OK
-
-→ 開発工数が大幅に削減
-→ 非エンジニアでも管理画面がすぐ使える
-```
-
----
-
-## アプローチの使い分け
-
-### 判断フローチャート
-
-```
-Q1: 社内向け？顧客向け？
-    → 顧客向け → Django（ブランディングが必要）
-    → 社内向け → Q2へ
-
-Q2: 標準的なCRUD？特殊なロジック？
-    → 標準的 → AppSheet で十分
-    → 特殊（AI、API連携、複雑な計算）→ Django
-
-Q3: 効果検証が先？本実装が先？
-    → 効果検証 → AppSheet でプロトタイプ
-    → 本実装 → Django で開発
-
-Q4: スマホでバーコード読み取り？GPS？
-    → 必要 → AppSheet が得意
-    → 不要 → どちらでも可
-```
-
-### 具体例での使い分け
-
-| 業務アプリ | 推奨アプローチ | 理由 |
-|---|---|---|
-| 日報入力 | AppSheet | 標準的なフォーム入力 |
-| 在庫チェック（バーコード） | AppSheet | バーコード読み取りが標準装備 |
-| 経費申請・承認 | AppSheet | 承認フローが設定だけで実現 |
-| 売上ダッシュボード | Looker Studio | ドラッグ＆ドロップで作成 |
-| AIレコメンド機能 | Django | 独自ロジックが必要 |
-| 外部API連携（freee等） | Django | API呼び出しが必要 |
-| 顧客向け予約システム | Django | ブランディングされたUI |
-| 複雑な計算・集計 | Django | Pythonの処理能力 |
-
-### ハイブリッド運用
-
-```
-【例：小売店の業務システム】
-
-AppSheet（現場スタッフ向け）
-├─ 在庫チェック（バーコード読み取り）
-├─ 日報入力（スマホから）
-└─ 発注依頼（承認フロー付き）
-
-Looker Studio（経営者向け）
-├─ 売上ダッシュボード
-├─ 在庫推移グラフ
-└─ 店舗別比較
-
-Django（独自機能）
-├─ AIによる発注量推奨
-├─ freee連携（会計自動化）
-└─ 顧客向けポイントアプリ
-
-    ↓ すべてのデータは
-
-Supabase（一元管理）
+目標: AppSheetでは実現できない機能をDjangoで作る
 ```
 
 ---
 
-## データ可視化（グラフ・ダッシュボード）
+## 第4部：Supabase Realtime + Looker Studio
 
-### 技術構成
+### Supabase Realtime とは
 
 ```
-Django ORM（Python）でデータ取得
-    ↓
-Django テンプレートに渡す
-    ↓
-Chart.js でグラフ表示
+PostgreSQL の LISTEN/NOTIFY を活用したリアルタイム同期機能
+
+【できること】
+・データ変更を即座に全クライアントに反映
+・複数ユーザー間でのリアルタイム共有
+・ダッシュボードの自動更新
+
+【Firebaseとの違い】
+・Firebase: 別途NoSQLを導入（データが分散）
+・Supabase Realtime: PostgreSQL内で完結（データ一元管理）
 ```
 
-### 実装例
+### Realtime の仕組み
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      Supabase                                    │
+│  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐       │
+│  │ PostgreSQL  │ ──→ │  Realtime   │ ──→ │ WebSocket   │       │
+│  │ (データ変更) │     │  (検知)     │     │ (配信)      │       │
+│  └─────────────┘     └─────────────┘     └─────────────┘       │
+└─────────────────────────────────────────────────────────────────┘
+        ↑                                         │
+   Django で更新                                  ↓
+                                           ブラウザに即時反映
+```
+
+### Django + Supabase Realtime
 
 ```python
-# views.py
-def dashboard(request):
-    # Django ORM で集計（ブロンズのSQLスキルが活きる）
-    売上データ = Sales.objects.values('月') \
-        .annotate(合計=Sum('金額')) \
-        .order_by('月')
+# views.py - データ更新
+def update_order_status(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.status = 'completed'
+    order.save()
 
-    return render(request, 'dashboard.html', {
-        'labels': [d['月'] for d in 売上データ],
-        'values': [d['合計'] for d in 売上データ],
-    })
+    # Supabase Realtime が自動で検知
+    # → 他のユーザーの画面も即座に更新
+
+    return JsonResponse({'status': 'ok'})
 ```
 
 ```html
-<!-- dashboard.html -->
-<canvas id="salesChart"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- templates/dashboard.html -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
-new Chart(document.getElementById('salesChart'), {
-    type: 'bar',
-    data: {
-        labels: {{ labels|safe }},
-        datasets: [{
-            label: '月別売上',
-            data: {{ values|safe }}
-        }]
+const supabase = createClient('{{ supabase_url }}', '{{ supabase_anon_key }}');
+
+// リアルタイム購読
+supabase
+  .channel('orders')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' },
+    (payload) => {
+      // データ変更を検知 → HTMXで該当部分を再取得
+      htmx.trigger('#order-list', 'refresh');
     }
-});
+  )
+  .subscribe();
 </script>
+
+<div id="order-list" hx-get="/orders/" hx-trigger="refresh">
+  <!-- 注文一覧 -->
+</div>
 ```
 
-### 作れるグラフ・ダッシュボード
+### Looker Studio との連携
 
 ```
+【構成】
+Supabase（PostgreSQL）
+    ↓ 直接接続
+Looker Studio
+    ↓
+経営ダッシュボード（自動更新）
+
+【作れるもの】
 ・日別/月別売上推移（折れ線グラフ）
 ・店舗別売上比較（棒グラフ）
 ・商品カテゴリ構成比（円グラフ）
@@ -488,33 +562,186 @@ new Chart(document.getElementById('salesChart'), {
 ・KPI表示（数値カード）
 ```
 
----
+### 学習内容（8〜10時間）
 
-## 印刷機能
+```
+・Supabase Realtime の設定
+・リアルタイム購読の実装
+・HTMX との組み合わせ
+・Looker Studio アカウント作成
+・Supabase（PostgreSQL）への接続
+・売上推移、在庫状況のダッシュボード
+・フィルタ、日付範囲の設定
+・共有設定（経営者への公開）
 
-### 対応方法
-
-| 方法 | 難易度 | 用途 |
-|---|---|---|
-| ブラウザ印刷 | ◎ 簡単 | レポート、一覧表 |
-| 印刷用CSS | ○ 中程度 | 整形された帳票 |
-| WeasyPrint | ○ 中程度 | 請求書PDF生成（Python製） |
-
-### 技術詳細
-
-```python
-# views.py - ブラウザ印刷用のビュー
-def print_report(request):
-    orders = Order.objects.filter(日付=today)
-    return render(request, 'print_report.html', {'orders': orders})
+目標: リアルタイムで更新されるダッシュボードを構築する
 ```
 
-```css
-/* 印刷用CSS */
-@media print {
-  .navbar { display: none; }
-  .no-print { display: none; }
-}
+---
+
+## 第5部：環境分離と自動化（CI/CD）
+
+### なぜ環境分離が必要か
+
+```
+【環境分離なしの問題】
+・開発中の変更が本番に影響
+・テストなしでデプロイ → 障害発生
+・「私のPCでは動く」問題
+
+【3層環境分離】
+開発環境（Development）: 開発者が自由に試す
+ステージング環境（Staging）: 本番同等で最終確認
+本番環境（Production）: 顧客が使う
+```
+
+### 環境構成
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  開発環境（Codespaces）                                         │
+│  ・ローカルDB or Supabase開発プロジェクト                       │
+│  ・自由に実験・デバッグ                                         │
+└─────────────────────────────────────────────────────────────────┘
+        │ git push (feature branch)
+        ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  GitHub Actions                                                  │
+│  ・自動テスト（pytest）                                         │
+│  ・コード品質チェック                                           │
+└─────────────────────────────────────────────────────────────────┘
+        │ merge to main
+        ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  ステージング環境（Railway/Render）                              │
+│  ・本番同等のデータ構造                                         │
+│  ・関係者が最終確認                                             │
+└─────────────────────────────────────────────────────────────────┘
+        │ 承認後デプロイ
+        ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  本番環境（Railway/Render）                                      │
+│  ・顧客が使用                                                   │
+│  ・Supabase本番プロジェクト                                     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### GitHub Actions 設定例
+
+```yaml
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest
+
+      - name: Run linter
+        run: ruff check .
+```
+
+### 学習内容（6〜8時間）
+
+```
+・環境変数による設定切り替え
+・.env ファイルの管理（.gitignore）
+・GitHub Actions の基本
+・pytest での自動テスト
+・Railway / Render へのデプロイ設定
+・ステージング → 本番のワークフロー
+・ロールバック手順
+
+目標: 安全にデプロイできる仕組みを構築する
+```
+
+---
+
+## 第6部：実践プロジェクト
+
+### プロジェクトの流れ
+
+```
+1. 業務課題の分析
+   ・解決したい課題は何か
+   ・誰が使うシステムか
+   ・現状のフローはどうなっているか
+
+2. AppSheet でプロトタイプ
+   ・データ構造を設計
+   ・現場で試用
+   ・フィードバック収集
+
+3. Django + HTMX で本実装
+   ・AppSheetでは難しい機能を実装
+   ・Pydantic でデータ検証
+   ・Supabase JSONB で柔軟に対応
+
+4. Realtime + Looker Studio
+   ・リアルタイム同期設定
+   ・経営ダッシュボード作成
+
+5. CI/CD 設定
+   ・自動テスト
+   ・ステージング → 本番デプロイ
+
+6. 運用開始
+   ・効果測定
+   ・改善サイクル
+```
+
+### プロジェクト例
+
+```
+【例1：日報システム】
+・店舗スタッフがスマホから入力
+・売上、来客数、特記事項を登録
+・本部はダッシュボードでリアルタイム確認
+・日別・週別・月別の集計グラフ
+
+【例2：在庫管理】
+・バーコードで入出庫登録
+・在庫数をリアルタイム表示
+・発注点を下回ったらアラート
+・店舗間の在庫移動
+
+【例3：承認ワークフロー】
+・経費申請をWebフォームで提出
+・上長が承認・却下
+・ステータスをリアルタイム表示
+・月次集計をダッシュボード化
+```
+
+### 学習内容（15〜20時間）
+
+```
+・自社の業務課題を分析
+・AppSheet でプロトタイプ作成
+・Django + HTMX で本実装
+・Supabase Realtime 設定
+・Looker Studio でダッシュボード
+・CI/CD 設定
+・効果測定とフィードバック
+
+目標: 実際に業務効果を出すシステムを完成させる
 ```
 
 ---
@@ -541,27 +768,13 @@ After:  訪問先でスマホ入力 → 自動で週報・ダッシュボード�
 | 課題 | シルバーで解決 |
 |---|---|
 | 申請書が紙 or Excel添付 | Djangoフォームで申請→自動集計 |
-| 承認待ちの確認が面倒 | ステータス管理 + 通知 |
+| 承認待ちの確認が面倒 | ステータス管理 + リアルタイム通知 |
 | 月末にデータが届かない | リアルタイムで蓄積済み |
 
 ```
 Before: 各部署からExcelが届く → 集計 → 突合 → 修正依頼
 After:  Webフォームから入力 → 自動バリデーション → 即座に集計
 → 「催促」「修正依頼」の業務がなくなる
-```
-
-### 総務・人事
-
-| 課題 | シルバーで解決 |
-|---|---|
-| 有給申請が紙 | Webで申請 → 自動承認フロー |
-| 社員情報の更新漏れ | 本人がセルフサービスで更新 |
-| 研修受講管理 | 受講状況をダッシュボードで把握 |
-
-```
-Before: 有給申請書 → 上長印鑑 → 総務で集計 → Excel管理
-After:  Webで申請 → 自動承認フロー → 残日数自動更新
-→ 紙の回覧・押印がなくなる
 ```
 
 ### 店舗スタッフ
@@ -611,71 +824,34 @@ After:
 
 ---
 
-## 作れるようになるもの
-
-### 業務アプリ例
-
-```
-・顧客管理（CRM）
-・在庫管理
-・予約システム
-・勤怠管理
-・承認ワークフロー
-・売上ダッシュボード
-・日報システム
-・シフト管理
-```
-
-### 具体例：日報システム
-
-```
-【機能】
-・店舗スタッフがスマホから入力
-・売上、来客数、特記事項を登録
-・本部はダッシュボードでリアルタイム確認
-・日別・週別・月別の集計グラフ
-・CSV/PDF出力
-
-【技術構成】
-・Django: 入力フォーム、ビュー、認証
-・HTMX: 動的なデータ更新
-・Django Admin: 管理画面
-・Chart.js: グラフ表示
-・印刷用CSS: レポート出力
-```
-
----
-
 ## 技術選定の根拠
 
-### 1. Django + HTMX を選択した理由
+### 1. AppSheet → Django の流れを選択した理由
+
+```
+【従来】
+「ノーコード or コード」の二者択一
+→ ノーコードで始めたらコードに移行できない
+→ コードで始めたらプロトタイプに時間がかかる
+
+【シルバーのアプローチ】
+AppSheet でプロトタイプ → Django で本実装
+→ 両方のメリットを活かす
+→ データはSupabaseに一元化（移行不要）
+```
+
+### 2. Supabase JSONB を選択した理由
 
 | 比較対象 | 選択理由 |
 |---|---|
-| React | JavaScript習得が必要、学習コスト高 |
-| Vue.js | 同上 |
-| Flask | Django ほど「バッテリー同梱」でない |
+| Firebase | NoSQLはSQL継続性がない、リアルタイムのためだけに導入するのは過剰 |
+| 通常RDBのみ | スキーマ変更が頻繁だと運用が大変 |
 
-**Django + HTMX の優位性:**
-- **ブロンズと同じ Python** で学習負荷を最小化
-- Django Admin で管理画面が自動生成
-- 認証・CSRF・XSS対策が組み込み済み
-- HTMX で JavaScript なしに動的UI
-- AI（Copilot）との相性が良い
-
-### 2. Supabase を選択した理由
-
-| 比較対象 | 選択理由 |
-|---|---|
-| Firebase | NoSQLはSQL継続性がない |
-| 自前サーバー | 運用負担が大きすぎる |
-| SQLite | 本番運用には不向き |
-
-**Supabaseの優位性:**
+**Supabase JSONB の優位性:**
 - SQL（PostgreSQL）ベースで **ブロンズのSQL がそのまま使える**
-- マネージドで運用負担なし
-- 無料枠で学習・小規模運用に十分
-- Django ORM から直接接続可能
+- JSONB で柔軟なデータ構造に対応
+- Realtime 機能も PostgreSQL 内で完結
+- 1つのデータベースで全て管理
 
 ### 3. GitHub Copilot を選択した理由
 
@@ -735,198 +911,40 @@ After:
 
 ---
 
-## 「PCローカルにコードを置かない」メリット
-
-### 中小企業の現実に対応
-
-```
-【従来の問題】
-・担当者退職 → 環境構築からやり直し
-・PC故障 → コード消失
-・兼業エンジニア → 本業PCに開発環境を入れたくない
-・セキュリティ → コードが個人PCに散在
-
-【Codespaces + GitHubで解決】
-・退職 → 新担当がログインするだけ
-・PC故障 → 別PCでログインして継続
-・兼業 → ブラウザで作業、PCに影響なし
-・セキュリティ → コードは会社のGitHubに集約
-```
-
----
-
-## 開発ライフサイクル全体でのメリット
-
-### 開発フェーズ
-
-| メリット | 内容 |
-|---|---|
-| 環境構築ゼロ | ブラウザを開くだけで開始 |
-| AI伴走 | GitHub Copilot が実装をサポート |
-| 属人化防止 | 環境がコード化されている |
-| どこでも作業 | PC・場所を選ばない |
-| Python統一 | 新言語の学習不要 |
-
-### テスト・デプロイフェーズ
-
-| メリット | 内容 |
-|---|---|
-| 環境差異なし | 「私のPCでは動く」問題がない |
-| ワンアクション | git push で自動デプロイ |
-| 履歴管理 | GitHub上で全履歴が残る |
-| ロールバック | 問題があれば即座に戻せる |
-
-### 保守・運用フェーズ
-
-| メリット | 内容 |
-|---|---|
-| 引き継ぎ容易 | 新担当者はログインするだけ |
-| コード理解 | Copilot に「このコードの説明」を依頼 |
-| 修正即反映 | 小さな修正もすぐデプロイ可能 |
-| 監視 | Sentry, Railway ログで状況確認 |
-
----
-
-## カリキュラム構成
-
-### 第1部：データベース設計（共通基盤）（8〜10時間）
-
-```
-・Supabaseプロジェクト作成
-・テーブル設計の考え方
-・主キー、外部キー、リレーション
-・SQLの基本（ブロンズの復習・発展）
-・Row Level Security の概念
-
-目標: どちらのアプローチでも使えるDB基盤を構築する
-```
-
-### 第2部：AppSheet による即時導入（10〜14時間）
-
-```
-・AppSheetアカウント作成
-・Supabase（PostgreSQL）への接続設定
-・日報入力アプリの作成
-・バーコード読み取り、GPS、カメラの活用
-・承認ワークフローの設定
-・実際に現場で使用開始
-
-目標: 1日で現場に投入できるアプリを作る
-```
-
-### 第3部：Looker Studio による可視化（6〜8時間）
-
-```
-・Looker Studio アカウント作成
-・Supabase（PostgreSQL）への接続
-・売上推移、在庫状況のダッシュボード
-・フィルタ、日付範囲の設定
-・共有設定（経営者への公開）
-
-目標: 経営ダッシュボードを作成し、効果を実感する
-```
-
-### 第4部：Django + HTMX 環境構築（8〜10時間）
-
-```
-・GitHubアカウント・リポジトリ作成
-・Codespacesの起動と操作
-・GitHub Copilot の有効化と使い方
-・Django プロジェクトの作成
-・Supabase（PostgreSQL）への接続
-・基本的なビューとテンプレート
-
-目標: Django開発環境を整える
-```
-
-### 第5部：Django でのアプリ開発（12〜16時間）
-
-```
-・モデル設計（Django ORM）
-・CRUD操作（作成・読取・更新・削除）
-・Django Admin の活用
-・Django 標準認証（ログイン・ログアウト）
-・フォーム作成（入力、バリデーション）
-・HTMX で動的UI
-
-目標: AppSheetでは実現できない機能をDjangoで作る
-```
-
-### 第6部：品質確保とデプロイ（6〜8時間）
-
-```
-・AIによるコードレビュー（Copilot活用）
-・pytest でユニットテスト
-・Railway / Render へのデプロイ
-・環境変数の設定
-・AppSheetアプリとの共存
-
-目標: Djangoアプリを本番公開できる
-```
-
-### 第7部：使い分けの判断（4〜6時間）
-
-```
-・AppSheet vs Django の判断基準
-・ハイブリッド運用の設計
-・「AppSheetでは難しいこと」の洗い出し
-・次にDjangoで作るべきものの特定
-
-目標: 状況に応じて最適な手段を選べるようになる
-```
-
-### 第8部：実践プロジェクト（15〜20時間）
-
-```
-・自社の業務課題を分析
-・AppSheet / Django / ハイブリッドの選択
-・実装と現場への導入
-・効果測定とフィードバック
-・改善サイクルの実践
-
-目標: 実際に業務効果を出すシステムを完成させる
-```
-
----
-
 ## 学習時間の目安
 
 | 部 | 内容 | 目安時間 |
 |---|---|---|
-| 第1部 | データベース設計（共通基盤） | 8〜10時間 |
-| 第2部 | AppSheet による即時導入 | 10〜14時間 |
-| 第3部 | Looker Studio による可視化 | 6〜8時間 |
-| 第4部 | Django + HTMX 環境構築 | 8〜10時間 |
-| 第5部 | Django でのアプリ開発 | 12〜16時間 |
-| 第6部 | 品質確保とデプロイ | 6〜8時間 |
-| 第7部 | 使い分けの判断 | 4〜6時間 |
-| 第8部 | 実践プロジェクト | 15〜20時間 |
-| **合計** | | **69〜92時間** |
+| 第1部 | AppSheet でプロトタイピング | 8〜10時間 |
+| 第2部 | ハイブリッドDB実装（RDB + JSONB） | 6〜8時間 |
+| 第3部 | Django + HTMX（Webアプリ実装） | 12〜16時間 |
+| 第4部 | Supabase Realtime + Looker Studio | 8〜10時間 |
+| 第5部 | 環境分離と自動化（CI/CD） | 6〜8時間 |
+| 第6部 | 実践プロジェクト | 15〜20時間 |
+| **合計** | | **55〜72時間** |
 
 ```
-週5時間ペース → 約3.5〜4.5ヶ月
-週10時間ペース → 約1.5〜2.5ヶ月
+週5時間ペース → 約2.5〜3.5ヶ月
+週10時間ペース → 約1.5〜2ヶ月
 ```
 
 ### 学習の流れ
 
 ```
-【前半】即効性を体験（第1〜3部）
-・Supabaseでデータベース構築
-・AppSheetで現場ツールを即日リリース
-・Looker Studioでダッシュボード作成
+【前半】プロトタイプで価値を体験（第1〜2部）
+・AppSheetで素早くアプリ作成
+・JSONB + Pydantic でデータ基盤構築
 → 短期間で「業務効果」を実感
 
-【後半】開発力を習得（第4〜6部）
+【中盤】開発力を習得（第3〜4部）
 ・Django + HTMXでコード開発
-・AppSheetでは不可能な機能を実装
-・品質確保とデプロイ
+・Realtime + Looker Studio で可視化
 → 「作れる力」を身につける
 
-【統合】判断力を養成（第7〜8部）
-・どちらを使うか判断できる
-・実際のプロジェクトで成果を出す
-→ 「指揮能力」を獲得
+【後半】運用力を獲得（第5〜6部）
+・CI/CD で安全にデプロイ
+・実プロジェクトで成果を出す
+→ 「運用できる力」を習得
 ```
 
 ---
@@ -946,13 +964,11 @@ After:
 | Railway/Render | 無料枠あり | $5〜7/月 |
 
 ```
-【アプローチAのみ（ノーコード）の場合】
-Supabase + AppSheet + Looker Studio
-→ 小規模なら完全無料で運用可能
+【学習・小規模運用の場合】
+→ 月額 $15〜40 程度（Copilot Pro + ホスティング）
 
-【アプローチBも含む（ハイブリッド）の場合】
-+ Codespaces + Copilot + Railway/Render
-→ 月額 $15〜40 程度
+【本格運用の場合】
+→ 月額 $50〜80 程度（Supabase Pro 含む）
 ```
 
 ### 外注との比較
@@ -962,7 +978,7 @@ Supabase + AppSheet + Looker Studio
 | 初期開発 | 300万円〜 | 教育費 + 自社工数 |
 | 月額保守 | 5〜10万円 | ほぼゼロ（ツール費のみ） |
 | 追加開発 | 都度見積もり | 自社で対応可能 |
-| 導入スピード | 3〜6ヶ月 | AppSheetなら即日 |
+| 導入スピード | 3〜6ヶ月 | プロトタイプなら即日 |
 | 依存度 | 高い | 自律可能 |
 
 ---
@@ -986,8 +1002,11 @@ Supabase + AppSheet + Looker Studio
 
 ```
 【シルバーで習得】
-・Django によるWebアプリ開発
-・Supabase（PostgreSQL）によるデータ管理
+・AppSheet → Django への流れ
+・Supabase（PostgreSQL + JSONB + Realtime）
+・Pydantic によるデータ検証
+・Django + HTMX によるWebアプリ開発
+・CI/CD（GitHub Actions）
 ・AI伴走（Copilot）での開発スキル
 
     ↓ そのまま活きる（Python のまま！）
@@ -996,7 +1015,7 @@ Supabase + AppSheet + Looker Studio
 ・requests / httpx で外部API連携
 ・Celery でバックグラウンド処理
 ・Webhook 受信
-・PWA 化
+・PWA 化（基礎）
 ```
 
 ---
@@ -1007,43 +1026,49 @@ Supabase + AppSheet + Looker Studio
 
 ```
 「組織の業務プロセス改善」
+〜 Excelを送る業務をなくす 〜
 
-・Excelを送る業務をなくす
-・データ収集からデジタル化
+・プロトタイプで素早く検証
+・ハイブリッドDBで柔軟に対応
+・Django + HTMX で本格実装
 ・リアルタイムで情報共有
-・目的に応じて最適な手段を選べる
+・CI/CD で安全に運用
 ```
 
 ### 技術スタック
 
 ```
-【共通基盤】
-Supabase（PostgreSQL）... データの心臓部
+【プロトタイピング】
+AppSheet            ... ノーコードで素早く検証
 
-【アプローチA：ノーコード】
-AppSheet      ... 現場入力アプリ（即日導入）
-Looker Studio ... 経営ダッシュボード
+【データベース】
+Supabase            ... PostgreSQL + JSONB + Realtime
+Pydantic            ... データ検証（ブロンズから継続）
 
-【アプローチB：コード開発】
-Django + HTMX ... Webアプリ（Python統一）
-Codespaces    ... ブラウザ開発環境
-Copilot       ... AI伴走
+【Webアプリ】
+Django + HTMX       ... Python統一、JS不要
+Codespaces          ... ブラウザ開発環境
+Copilot             ... AI伴走
 
-→ 両方を使い分けられる「指揮能力」
-→ データは常にSupabaseに一元化
-→ アプローチAからBへの移行もスムーズ
+【可視化】
+Looker Studio       ... 経営ダッシュボード
+
+【運用】
+GitHub Actions      ... CI/CD
+Railway / Render    ... ホスティング
 ```
 
 ### 期待される成果
 
 ```
 シルバー修了者は:
-・AppSheetで現場ツールを即日導入できる
-・Looker Studioで経営ダッシュボードを作れる
+・AppSheetでプロトタイプを素早く作れる
+・Supabase（JSONB + Realtime）を設計・運用できる
+・Pydanticでデータ検証ができる
 ・Django + HTMXで独自アプリを開発できる
-・状況に応じてアプローチを選択できる
+・Looker Studioで経営ダッシュボードを作れる
+・CI/CDで安全にデプロイできる
 ・AIを活用した開発ができる
-・クラウド環境で開発・運用できる
 
 → 組織の業務プロセスを改善できる人材
 → 「作ること」ではなく「効果を出すこと」を重視
@@ -1060,30 +1085,45 @@ Copilot       ... AI伴走
 - [ ] GitHubアカウント作成
 - [ ] 解決したい業務課題の洗い出し
 
-### 第1〜3部：ノーコードで即効性を体験
-- [ ] Supabaseプロジェクト作成・テーブル設計
+### 第1部：AppSheet でプロトタイピング
 - [ ] AppSheetアカウント作成
+- [ ] Supabase プロジェクト作成
 - [ ] AppSheet → Supabase 接続設定
-- [ ] 日報入力アプリの作成
-- [ ] 現場スタッフへの展開・使用開始
-- [ ] Looker Studioでダッシュボード作成
-- [ ] 経営者への共有
+- [ ] プロトタイプアプリの作成
+- [ ] 現場での試用とフィードバック収集
 
-### 第4〜6部：Django開発力の習得
+### 第2部：ハイブリッドDB実装
+- [ ] JSONB カラムの設計
+- [ ] Pydantic モデルの作成（ブロンズ復習）
+- [ ] コアデータと拡張データの分離
+
+### 第3部：Django + HTMX
 - [ ] Codespacesの起動確認
 - [ ] GitHub Copilot の有効化
 - [ ] Django プロジェクト作成
 - [ ] Supabase PostgreSQL 接続
 - [ ] Django Admin の活用
 - [ ] HTMX で動的UI
-- [ ] pytest でテスト
-- [ ] Railway / Render へデプロイ
 
-### 第7〜8部：判断力と実践
-- [ ] AppSheet vs Django の使い分け整理
-- [ ] 自社のハイブリッド運用設計
-- [ ] 実践プロジェクト完了
-- [ ] 業務効果の測定
+### 第4部：Realtime + Looker Studio
+- [ ] Supabase Realtime 設定
+- [ ] リアルタイム購読の実装
+- [ ] Looker Studio でダッシュボード作成
+- [ ] 経営者への共有
+
+### 第5部：環境分離と自動化
+- [ ] 環境変数の設定（.env）
+- [ ] GitHub Actions の設定
+- [ ] pytest でテスト作成
+- [ ] Railway / Render へデプロイ
+- [ ] ステージング → 本番のワークフロー確認
+
+### 第6部：実践プロジェクト
+- [ ] 業務課題の分析
+- [ ] プロトタイプ作成
+- [ ] 本実装
+- [ ] 運用開始
+- [ ] 効果測定
 - [ ] ゴールドで取り組む課題の特定
 
 ---
