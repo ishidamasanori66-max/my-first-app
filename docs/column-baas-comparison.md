@@ -77,6 +77,83 @@ Webアプリやモバイルアプリのバックエンド機能を
 
 ---
 
+## DjangoとSupabaseの機能分担
+
+### 重複する機能と採用方針
+
+| 機能 | Django | Supabase | 本カリキュラムでの採用 |
+|---|---|---|---|
+| 認証 | django.contrib.auth | Supabase Auth | **Django** |
+| ユーザー管理 | User モデル | auth.users テーブル | **Django** |
+| セッション管理 | Session middleware | JWT | **Django** |
+| データベースアクセス | ORM | PostgREST API | **Django ORM** |
+| ファイルストレージ | FileField + storages | Supabase Storage | **Supabase** |
+| リアルタイム | Django Channels | Supabase Realtime | **Supabase** |
+| 行レベルセキュリティ | Permission + カスタム | PostgreSQL RLS | **Django側で制御** |
+
+### 基本方針
+
+```
+【役割分担】
+・Django = アプリケーションサーバー（ロジック・認証・UI）
+・Supabase = データベースサーバー（保存・リアルタイム・ファイル）
+
+【判断基準】
+・サーバーサイドで完結 → Django
+・クライアント直接アクセス → Supabase
+・HTMX との相性 → Django 優先
+・設定の簡単さ → Supabase（Realtime, Storage）
+```
+
+### データアクセス経路の一貫性
+
+```
+【シルバー〜ダイヤモンド共通】
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│   Django    │ ──→ │  Django ORM │ ──→ │  Supabase   │
+│   (View)    │      │             │      │ PostgreSQL  │
+└─────────────┘      └─────────────┘      └─────────────┘
+
+経路：Django ORM（一貫）
+DB：Supabase PostgreSQL（一貫）
+```
+
+| レベル | データアクセス経路 | DB | 備考 |
+|---|---|---|---|
+| ブロンズ | Python sqlite3 | SQLite | SQL直接操作を学習 |
+| シルバー | Django ORM | Supabase PostgreSQL | ORM導入 |
+| ゴールド | Django ORM | Supabase PostgreSQL | 外部API連携追加 |
+| プラチナ | Django ORM | Supabase PostgreSQL | モジュール拡張 |
+| ダイヤモンド | Django ORM | Supabase PostgreSQL | チーム開発 |
+
+```
+【例外的なアクセス（参照・通知のみ）】
+・AppSheet → Supabase（シルバー第1部：プロトタイプのみ）
+・Supabase Realtime（変更通知の受信、データ取得はORM経由）
+・Looker Studio → Supabase（参照専用、BI連携）
+
+→ 「Django ORMが主経路」という原則は一貫
+```
+
+### PostgREST APIを使わない理由
+
+```
+・PostgREST はフロントエンド（JavaScript）向け
+・本カリキュラムは Django + HTMX（サーバーサイドレンダリング）
+・ORM で十分、かつ学習コストが低い
+・経路を一本化することで混乱を防ぐ
+```
+
+### 避けるべきアンチパターン
+
+```
+✗ 認証を二重管理（Django Auth と Supabase Auth の併用）
+✗ 同じデータへの複数経路（ORM と PostgREST の混在）
+✗ 責務の曖昧な分担
+```
+
+---
+
 ## 比較検討したサービス
 
 ### 1. Firebase（Google）
