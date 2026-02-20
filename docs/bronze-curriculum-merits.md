@@ -23,10 +23,11 @@
 
 | ステージ | 技術スタック | 環境 | AI伴走 | ゴール |
 |---|---|---|---|---|
-| **ブロンズ** | **Python + Pandas + sqlite3** | **Google Colab** | **Gemini** | **Excel業務の自動化 + SQL基礎** |
-| シルバー | React (Vite) + Supabase | Codespaces | Claude Code | 業務アプリ開発 |
-| ゴールド | + Edge Functions + 外部API連携 | Codespaces | Claude Code | システム統合 |
-| プラチナ | Python + LangChain + Claude API + pgvector | Colab | Claude API | AI自律化 |
+| **ブロンズ** | **Python + Pandas + Pydantic + sqlite3** | **Google Colab** | **Gemini** | **Excel業務の自動化 + データ検証 + SQL基礎** |
+| シルバー | AppSheet → Django + HTMX + Supabase (JSONB) | Codespaces | GitHub Copilot | 業務アプリ構築 |
+| ゴールド | + requests/httpx + Celery + PWA | Codespaces | GitHub Copilot | システム統合と自動化 |
+| プラチナ | + 選択モジュール（決済・LINE・AI等） | Codespaces | GitHub Copilot | 顧客体験の強化 |
+| ダイヤモンド | + scikit-learn + Prophet + Streamlit | Codespaces | GitHub Copilot | データ駆動経営 |
 
 **ブロンズは「プログラミング未経験者の最初の一歩」かつ「シルバーへの最短経路」**
 
@@ -67,7 +68,7 @@
 ### 確定構成
 
 ```
-Python + Pandas（入出力） + sqlite3（処理） + matplotlib（可視化） + Gemini（AI伴走）
+Python + Pandas（入出力） + Pydantic（データ検証） + sqlite3（処理） + matplotlib（可視化） + Gemini（AI伴走）
 ```
 
 ### 各技術の役割
@@ -76,6 +77,7 @@ Python + Pandas（入出力） + sqlite3（処理） + matplotlib（可視化）
 |---|---|---|
 | **Python** | プログラミング言語 | データ処理の標準 |
 | **Pandas** | ファイル入出力 | Excel/CSV ↔ sqlite の橋渡し |
+| **Pydantic** | データ検証 | 型チェック・バリデーション |
 | **sqlite3** | データ処理（SQL） | Python標準ライブラリ |
 | **matplotlib** | データ可視化 | グラフ作成 |
 | **Google Colab** | 実行環境 | ブラウザで完結 |
@@ -84,9 +86,9 @@ Python + Pandas（入出力） + sqlite3（処理） + matplotlib（可視化）
 ### 処理フローのイメージ
 
 ```
-【入力】          【処理】           【出力】
-Excel/CSV  →  Pandas  →  sqlite3  →  Pandas  →  Excel/グラフ
-              (読込)      (SQL)       (書出)
+【入力】          【検証】        【処理】           【出力】
+Excel/CSV  →  Pandas  →  Pydantic  →  sqlite3  →  Pandas  →  Excel/グラフ
+              (読込)     (型チェック)    (SQL)       (書出)
 ```
 
 ---
@@ -231,7 +233,55 @@ Pandas は入出力のみ。データ処理は第3部の SQL で行う。
 | VLOOKUP         | JOIN                   |
 ```
 
-### 第4部：データ可視化（4〜6時間）
+### 第4部：Pydantic + JSON（4〜6時間）
+
+```
+・Pydantic とは（データのお掃除ロボット）
+・型の指定（str, int, float, list）
+・バリデーション（不正データの検出）
+・JSON の読み書き
+・JSON とテーブルの違い
+・実務での活用（CSV読み込み前のデータ検証）
+
+目標: データの「正しさ」を自動でチェックできるようになる
+
+【Pydantic のイメージ】
+Excelデータ → Pydantic で検証 → 正しいデータだけ sqlite に保存
+                ↓ エラー
+            不正データをレポート
+
+【なぜブロンズで学ぶか】
+・シルバーのDjango + Supabase JSONB で必須
+・データの品質管理は全ステージで重要
+・「型」の考え方はプログラミングの基本
+```
+
+```python
+# Pydantic の基本例
+from pydantic import BaseModel, field_validator
+
+class 売上レコード(BaseModel):
+    店舗名: str
+    日付: str
+    金額: int
+    カテゴリ: str
+
+    @field_validator('金額')
+    @classmethod
+    def 金額チェック(cls, v):
+        if v < 0:
+            raise ValueError('金額がマイナスです')
+        return v
+
+# 使い方
+data = {"店舗名": "渋谷店", "日付": "2026-01-15", "金額": 5000, "カテゴリ": "飲食"}
+record = 売上レコード(**data)  # OK
+
+data_bad = {"店舗名": "渋谷店", "日付": "2026-01-15", "金額": -100, "カテゴリ": "飲食"}
+record = 売上レコード(**data_bad)  # エラー！「金額がマイナスです」
+```
+
+### 第5部：データ可視化（4〜6時間）
 
 ```
 ・matplotlib の基本
@@ -245,7 +295,7 @@ Pandas は入出力のみ。データ処理は第3部の SQL で行う。
 目標: SQL の結果を分かりやすいグラフにできる
 ```
 
-### 第5部：実践プロジェクト（6〜8時間）
+### 第6部：実践プロジェクト（6〜8時間）
 
 ```
 ・自社データを使った実践
@@ -270,15 +320,14 @@ Pandas は入出力のみ。データ処理は第3部の SQL で行う。
 | 第1部 | Python + Colab 環境 | 8〜10時間 |
 | 第2部 | Pandas 入出力 | 4〜6時間 |
 | 第3部 | SQL によるデータ処理 | 10〜12時間 |
-| 第4部 | データ可視化 | 4〜6時間 |
-| 第5部 | 実践プロジェクト | 6〜8時間 |
-| **合計** | | **32〜42時間** |
+| 第4部 | Pydantic + JSON | 4〜6時間 |
+| 第5部 | データ可視化 | 4〜6時間 |
+| 第6部 | 実践プロジェクト | 6〜8時間 |
+| **合計** | | **36〜48時間** |
 
 ```
-週5時間ペース → 約6〜8週（1.5〜2ヶ月）
-週10時間ペース → 約3〜4週（1ヶ月弱）
-
-※ 旧構成（Pandas処理込み）比で約30%短縮
+週5時間ペース → 約7〜10週（2〜2.5ヶ月）
+週10時間ペース → 約4〜5週（約1ヶ月）
 ```
 
 ---
@@ -634,11 +683,12 @@ HAVING COUNT(*) > 1
 ### 技術スタック
 
 ```
-Python + Pandas（入出力） + sqlite3（SQL処理） + matplotlib（可視化） + Gemini
+Python + Pandas（入出力） + Pydantic（検証） + sqlite3（SQL処理） + matplotlib（可視化） + Gemini
 
 ・環境構築ゼロ
 ・完全無料
 ・SQL に一本化してシルバーへの最短経路
+・Pydantic はシルバー以降でそのまま活用
 ・プラチナまで繋がる Python
 ```
 
@@ -648,6 +698,8 @@ Python + Pandas（入出力） + sqlite3（SQL処理） + matplotlib（可視化
 ブロンズ修了者は:
 ・Python の基本文法を理解している
 ・SQL でデータ抽出・集計ができる
+・Pydantic でデータ検証ができる
+・JSON の読み書きができる
 ・定型業務を自動化できる
 ・AIに質問しながら問題解決できる
 ・Before / After で効果を説明できる
@@ -671,7 +723,8 @@ Python + Pandas（入出力） + sqlite3（SQL処理） + matplotlib（可視化
 - [ ] 第1部: Python + Colab 環境の完了
 - [ ] 第2部: Pandas 入出力の完了
 - [ ] 第3部: SQL によるデータ処理の完了
-- [ ] 第4部: データ可視化の完了
+- [ ] 第4部: Pydantic + JSON の完了
+- [ ] 第5部: データ可視化の完了
 
 ### 実践
 - [ ] 自社データでの実践課題
@@ -681,6 +734,8 @@ Python + Pandas（入出力） + sqlite3（SQL処理） + matplotlib（可視化
 
 ### シルバーへの準備
 - [ ] SQL の基本構文を習得
+- [ ] Pydantic でデータ検証ができる
+- [ ] JSON の読み書きができる
 - [ ] テーブル思考を習得
 - [ ] AIに質問する習慣がついている
 - [ ] 「Webアプリにしたい」という動機がある

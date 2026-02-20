@@ -63,8 +63,8 @@ Diamond → 蓄積データから次の一手を見つける
 
 | ステージ | 技術スタック | 改善対象 | ゴール |
 |---|---|---|---|
-| ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 |
-| シルバー | Django + HTMX + Supabase + Copilot | 組織の業務プロセス | 業務アプリを自作 |
+| ブロンズ | Python + Pandas + Pydantic + sqlite3 | 個人の業務 | Excel業務の自動化 + データ検証 |
+| シルバー | AppSheet → Django + HTMX + Supabase (JSONB) + Realtime | 組織の業務プロセス | 業務アプリを構築 |
 | ゴールド | + requests/httpx + Celery + 外部API + PWA | 社内システム全体 | システム統合と自動化 |
 | **プラチナ** | **+ 選択モジュール（下記）** | **顧客接点・顧客体験** | **顧客体験の強化** |
 | ダイヤモンド | + scikit-learn + Prophet + Streamlit | 事業価値の創出 | データ駆動経営 |
@@ -1124,16 +1124,18 @@ def sync_customers_to_audience(request):
 ### 100%活用される技術
 
 ```
-【シルバー・ゴールドで習得済み】
+【ブロンズ〜ゴールドで習得済み】
+✓ Pydantic（データ検証 ← ブロンズから継続）
 ✓ Django + HTMX（UI構築）
-✓ Supabase（PostgreSQL）
-✓ Django ORM（データ操作）
+✓ Supabase（PostgreSQL + JSONB + Realtime）
+✓ Django ORM + JSONField（データ操作）
+✓ CI/CD（GitHub Actions ← シルバーから継続）
 ✓ requests/httpx（外部API連携）
 ✓ Celery（バックグラウンド処理）
 ✓ LINE API, freee API等
 ✓ PWA（アプリ化の基礎）
 ✓ GitHub Codespaces + Copilot
-✓ pytest（テスト）
+✓ pytest + Playwright（テスト）
 
 【プラチナで追加（選択モジュールに応じて）】
 + Google AI Studio（共通）

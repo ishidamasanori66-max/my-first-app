@@ -46,10 +46,10 @@ Diamond → 蓄積データから次の一手を見つける
 
 | ステージ | 技術スタック | 改善対象 | ゴール |
 |---|---|---|---|
-| ブロンズ | Python + Pandas + sqlite3 | 個人の業務 | Excel業務の自動化 |
-| シルバー | Django + HTMX + Supabase + Copilot | 組織の業務プロセス | 業務アプリを自作 |
-| **ゴールド** | **+ requests/httpx + Celery + PWA** | **社内システム全体** | **システム統合と自動化** |
-| プラチナ | + Stripe + LINE + PWA + AI | 顧客接点・顧客体験 | 顧客体験の強化 |
+| ブロンズ | Python + Pandas + Pydantic + sqlite3 | 個人の業務 | Excel業務の自動化 + データ検証 |
+| シルバー | AppSheet → Django + HTMX + Supabase (JSONB) + Realtime | 組織の業務プロセス | 業務アプリを構築 |
+| **ゴールド** | **+ requests/httpx + Celery + 外部API + PWA** | **社内システム全体** | **システム統合と自動化** |
+| プラチナ | + 選択モジュール（決済・LINE・AI等） | 顧客接点・顧客体験 | 顧客体験の強化 |
 | ダイヤモンド | + scikit-learn + Prophet + Streamlit | 事業価値の創出 | データ駆動経営 |
 
 ---
@@ -60,10 +60,12 @@ Diamond → 蓄積データから次の一手を見つける
 
 ```
 【できていること】
-・Djangoによる自作の業務アプリが動いている
-・データはSupabase（PostgreSQL）に蓄積
-・グラフ・ダッシュボードで可視化
-・印刷・PDF出力も可能
+・AppSheetでプロトタイプ → Djangoで本実装の流れが身についている
+・Django + HTMXによる自作の業務アプリが動いている
+・データはSupabase（PostgreSQL + JSONB）に蓄積
+・Supabase Realtimeでリアルタイム同期
+・Looker Studioで経営ダッシュボード
+・CI/CD（GitHub Actions）で安全にデプロイ
 
 【残っている課題】
 ・freee（会計）には別途手入力
@@ -450,8 +452,8 @@ INSTALLED_APPS = [
 
 ```
 1. カリキュラムの一貫性
-   ブロンズ: Python
-   シルバー: Python（Django）
+   ブロンズ: Python + Pydantic
+   シルバー: Python（Django + JSONB + Realtime）
    ゴールド: Python（requests, Celery）
    → 全ステージで「Pythonで解決できる人」を育てる
 
@@ -516,12 +518,11 @@ INSTALLED_APPS = [
 目標: Webアプリをアプリっぽく配布できる
 ```
 
-### 第5部：CI/CDと品質確保（4〜6時間）
+### 第5部：テスト強化と品質確保（4〜6時間）
 
 ```
-・GitHub Actions による継続的インテグレーション（CI）
-  → git push で自動テスト実行
-  → テストが通らないとマージできない
+・シルバーCI/CDの発展（GitHub Actions パイプライン拡張）
+  → シルバーで構築した基盤を活用
 ・E2Eテストの基礎（Playwright）
   → 「ログイン→データ登録→確認」のシナリオテスト
   → AIにテストコードを書かせる
@@ -531,7 +532,7 @@ INSTALLED_APPS = [
   → 何をテストすべきか（重要度ベース）
   → 自動テストと手動確認の使い分け
 
-目標: プッシュするたびに自動で品質チェックが走る仕組みを作る
+目標: API連携を含むシステム全体の品質を自動で担保する
 ```
 
 ### 第6部：実践プロジェクト（10〜15時間）
@@ -555,7 +556,7 @@ INSTALLED_APPS = [
 | 第2部 | 主要API連携 | 12〜16時間 |
 | 第3部 | 自動化とバックグラウンド処理 | 8〜10時間 |
 | 第4部 | PWA化 | 4〜6時間 |
-| 第5部 | CI/CDと品質確保 | 4〜6時間 |
+| 第5部 | テスト強化と品質確保 | 4〜6時間 |
 | 第6部 | 実践プロジェクト | 10〜15時間 |
 | **合計** | | **46〜63時間** |
 
@@ -648,9 +649,9 @@ INSTALLED_APPS = [
 ### 技術スタック
 
 ```
-Django + HTMX + Supabase + requests + Celery + PWA
+Django + HTMX + Supabase (JSONB + Realtime) + requests + Celery + PWA
 
-・シルバーの技術（Python）をすべて継続活用
+・シルバーの技術（Python + JSONB + Realtime + CI/CD）をすべて継続活用
 ・追加するのは「繋ぐ技術」と「自動化」のみ
 ・PWAで社内スタッフ向けモバイル対応
 ・プラチナで顧客向けアプリへ発展
@@ -695,11 +696,10 @@ Django + HTMX + Supabase + requests + Celery + PWA
 - [ ] アイコンの作成
 - [ ] 動作確認（ホーム画面追加）
 
-### 第5部（CI/CDと品質確保）
-- [ ] GitHub Actionsのセットアップ
-- [ ] pytest の整備
+### 第5部（テスト強化と品質確保）
+- [ ] シルバーCI/CDパイプラインの拡張
 - [ ] E2Eテスト（Playwright）の導入
-- [ ] プッシュ時の自動テスト実行
+- [ ] API連携テスト（モック / VCR）
 - [ ] テスト計画の作成
 
 ### 実践プロジェクト
