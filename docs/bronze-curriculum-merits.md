@@ -42,7 +42,6 @@
 ・手作業のデータ処理を自動化
 ・SQLによるデータ操作の基礎習得
 ・定期レポートの自動生成
-・データの可視化（グラフ作成）
 ```
 
 ### 解決する現場の課題
@@ -68,7 +67,7 @@
 ### 確定構成
 
 ```
-Python + Pandas（入出力） + Pydantic（データ検証） + sqlite3（処理） + matplotlib（可視化） + Gemini（AI伴走）
+Python + Pandas（入出力） + Pydantic（データ検証） + sqlite3（処理） + Gemini（AI伴走）
 ```
 
 ### 各技術の役割
@@ -79,15 +78,23 @@ Python + Pandas（入出力） + Pydantic（データ検証） + sqlite3（処�
 | **Pandas** | ファイル入出力 | Excel/CSV ↔ sqlite の橋渡し |
 | **Pydantic** | データ検証 | 型チェック・バリデーション |
 | **sqlite3** | データ処理（SQL） | Python標準ライブラリ |
-| **matplotlib** | データ可視化 | グラフ作成 |
 | **Google Colab** | 実行環境 | ブラウザで完結 |
 | **Gemini** | AI伴走 | Google環境との親和性 |
+
+### オプション技術
+
+| 技術 | 役割 | 用途 |
+|---|---|---|
+| **matplotlib** | データ可視化 | グラフ作成（ブロンズ完結の人向け） |
+| **openpyxl** | 書式付きExcel出力 | 色・罫線・太字付きのExcel生成 |
+
+※ シルバーに進む人は Looker Studio でグラフ作成、Django + CSS で表の装飾を行うため、オプション技術は不要
 
 ### 処理フローのイメージ
 
 ```
 【入力】          【検証】        【処理】           【出力】
-Excel/CSV  →  Pandas  →  Pydantic  →  sqlite3  →  Pandas  →  Excel/グラフ
+Excel/CSV  →  Pandas  →  Pydantic  →  sqlite3  →  Pandas  →  Excel/CSV
               (読込)     (型チェック)    (SQL)       (書出)
 ```
 
@@ -281,21 +288,7 @@ data_bad = {"店舗名": "渋谷店", "日付": "2026-01-15", "金額": -100, "�
 record = 売上レコード(**data_bad)  # エラー！「金額がマイナスです」
 ```
 
-### 第5部：データ可視化（4〜6時間）
-
-```
-・matplotlib の基本
-・棒グラフ（売上比較、カテゴリ別集計）
-・折れ線グラフ（時系列推移）
-・円グラフ（構成比）
-・複数グラフの配置
-・グラフの保存（PNG / PDF）
-・日本語フォント対応
-
-目標: SQL の結果を分かりやすいグラフにできる
-```
-
-### 第6部：実践プロジェクト（6〜8時間）
+### 第5部：実践プロジェクト（6〜8時間）
 
 ```
 ・自社データを使った実践
@@ -321,14 +314,20 @@ record = 売上レコード(**data_bad)  # エラー！「金額がマイナス�
 | 第2部 | Pandas 入出力 | 4〜6時間 |
 | 第3部 | SQL によるデータ処理 | 10〜12時間 |
 | 第4部 | Pydantic + JSON | 4〜6時間 |
-| 第5部 | データ可視化 | 4〜6時間 |
-| 第6部 | 実践プロジェクト | 6〜8時間 |
-| **合計** | | **36〜48時間** |
+| 第5部 | 実践プロジェクト | 6〜8時間 |
+| **合計** | | **32〜42時間** |
 
 ```
-週5時間ペース → 約7〜10週（2〜2.5ヶ月）
-週10時間ペース → 約4〜5週（約1ヶ月）
+週5時間ペース → 約6〜8週（1.5〜2ヶ月）
+週10時間ペース → 約3〜4週（約1ヶ月）
 ```
+
+### オプション
+
+| 内容 | 目安時間 | 対象 |
+|---|---|---|
+| matplotlib（グラフ作成） | 4〜6時間 | ブロンズ完結の人 |
+| openpyxl（書式付きExcel） | 2〜4時間 | Excel配布が必要な人 |
 
 ---
 
@@ -341,7 +340,7 @@ record = 売上レコード(**data_bad)  # エラー！「金額がマイナス�
 | 月次売上集計 | 3時間 | 5分 | 97% |
 | 複数ファイル統合 | 1時間 | 3分 | 95% |
 | データクレンジング | 2時間 | 10分 | 92% |
-| グラフ付きレポート | 1時間 | 5分 | 92% |
+| 集計レポート作成 | 1時間 | 5分 | 92% |
 
 ### 月間効果の試算
 
@@ -366,7 +365,6 @@ record = 売上レコード(**data_bad)  # エラー！「金額がマイナス�
 ```python
 import pandas as pd
 import sqlite3
-import matplotlib.pyplot as plt
 
 # 1. Excel を読み込み
 df = pd.read_excel('売上データ.xlsx')
@@ -387,7 +385,16 @@ ORDER BY 合計売上 DESC
 '''
 result = pd.read_sql(query, conn)
 
-# 4. グラフ作成
+# 4. Excel に出力
+result.to_excel('集計結果.xlsx', index=False)
+```
+
+### 【オプション】グラフ作成を追加する場合
+
+```python
+import matplotlib.pyplot as plt
+
+# 上記の result を使ってグラフ作成
 plt.figure(figsize=(10, 6))
 plt.bar(result['店舗名'], result['合計売上'])
 plt.title('店舗別売上')
@@ -395,9 +402,6 @@ plt.xlabel('店舗')
 plt.ylabel('売上（円）')
 plt.savefig('売上グラフ.png')
 plt.show()
-
-# 5. Excel に出力
-result.to_excel('集計結果.xlsx', index=False)
 ```
 
 ### 複数ファイルの統合
@@ -444,7 +448,7 @@ result = pd.read_sql(query, conn)
 【ブロンズ】
 1. CSVをフォルダに入れる
 2. コードを実行（1クリック）
-→ 5分で完成（グラフ付き）
+→ 5分で完成
 ```
 
 ### 2. 複数店舗データの分析
@@ -538,7 +542,7 @@ HAVING COUNT(*) > 1
 1. 受講者が持参した実際のExcelファイルを使う
 2. その場でColabに読み込み
 3. SQL で集計してみせる
-4. グラフを作成
+4. Excelに出力
 5. 「これが5分でできる」を体感
 
 → 初回で効果を実感 = 継続率向上
@@ -567,7 +571,7 @@ HAVING COUNT(*) > 1
 |---|---|
 | Google Colab | 無料（Pro は $10/月） |
 | Gemini | 無料枠あり |
-| Python / sqlite3 / Pandas / matplotlib | 無料 |
+| Python / sqlite3 / Pandas / Pydantic | 無料 |
 
 **→ ブロンズは完全無料で受講可能**
 
@@ -683,13 +687,14 @@ HAVING COUNT(*) > 1
 ### 技術スタック
 
 ```
-Python + Pandas（入出力） + Pydantic（検証） + sqlite3（SQL処理） + matplotlib（可視化） + Gemini
+Python + Pandas（入出力） + Pydantic（検証） + sqlite3（SQL処理） + Gemini
 
 ・環境構築ゼロ
 ・完全無料
 ・SQL に一本化してシルバーへの最短経路
 ・Pydantic はシルバー以降でそのまま活用
 ・プラチナまで繋がる Python
+・グラフ・書式設定はオプション（シルバー進学者は不要）
 ```
 
 ### 期待される成果
@@ -724,7 +729,11 @@ Python + Pandas（入出力） + Pydantic（検証） + sqlite3（SQL処理） +
 - [ ] 第2部: Pandas 入出力の完了
 - [ ] 第3部: SQL によるデータ処理の完了
 - [ ] 第4部: Pydantic + JSON の完了
-- [ ] 第5部: データ可視化の完了
+- [ ] 第5部: 実践プロジェクトの完了
+
+### オプション（必要に応じて）
+- [ ] matplotlib によるグラフ作成
+- [ ] openpyxl による書式付きExcel出力
 
 ### 実践
 - [ ] 自社データでの実践課題
@@ -1012,9 +1021,10 @@ print("sales_report.xlsx を出力しました")
 
 ### 各レベルでの「見た目」対応まとめ
 
-| レベル | 技術 | 書式設定 |
+| レベル | 技術 | 対応内容 |
 |---|---|---|
 | ブロンズ本編 | Python + sqlite3 | なし（データ処理のみ） |
+| ブロンズ・オプション | + matplotlib | グラフ作成 |
 | ブロンズ・オプション | + openpyxl | Excel書式（色・罫線・太字） |
 | シルバー | Django + HTMX | HTML/CSS（Web画面） |
 | ゴールド | + Looker Studio | グラフ・ダッシュボード |
