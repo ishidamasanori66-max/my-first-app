@@ -742,6 +742,139 @@ Python + Pandas（入出力） + Pydantic（検証） + sqlite3（SQL処理） +
 
 ---
 
+## 付録：Excel関数のSQL置き換え
+
+Excel集計で使用する関数の多くは、SQLで置き換えることが可能です。
+
+### 基本集計関数
+
+| Excel関数 | SQL | 用途 |
+|---|---|---|
+| `SUM(A:A)` | `SELECT SUM(column) FROM table` | 合計 |
+| `AVERAGE(A:A)` | `SELECT AVG(column) FROM table` | 平均 |
+| `COUNT(A:A)` | `SELECT COUNT(column) FROM table` | 件数 |
+| `MAX(A:A)` | `SELECT MAX(column) FROM table` | 最大値 |
+| `MIN(A:A)` | `SELECT MIN(column) FROM table` | 最小値 |
+
+### 条件付き集計
+
+| Excel関数 | SQL |
+|---|---|
+| `SUMIF(B:B,"東京",A:A)` | `SELECT SUM(amount) FROM orders WHERE branch='東京'` |
+| `COUNTIF(B:B,"東京")` | `SELECT COUNT(*) FROM orders WHERE branch='東京'` |
+| `AVERAGEIF(B:B,"東京",A:A)` | `SELECT AVG(amount) FROM orders WHERE branch='東京'` |
+| `SUMIFS(複数条件)` | `SELECT SUM(amount) FROM orders WHERE branch='東京' AND amount>=1000` |
+
+### 検索・参照
+
+| Excel関数 | SQL |
+|---|---|
+| `VLOOKUP(値,範囲,列,FALSE)` | `SELECT b.name FROM orders a JOIN customers b ON a.customer_id=b.id` |
+| `INDEX(MATCH(...))` | `SELECT ... FROM ... JOIN ... WHERE ...` |
+
+### グループ集計（ピボットテーブル相当）
+
+```
+【Excel：ピボットテーブル】
+行：支店名
+値：売上合計、件数
+
+【SQL】
+SELECT
+    branch,
+    SUM(amount) AS total_sales,
+    COUNT(*) AS order_count
+FROM orders
+GROUP BY branch
+ORDER BY total_sales DESC;
+```
+
+### 条件分岐
+
+| Excel関数 | SQL |
+|---|---|
+| `IF(A1>=100,"大口","小口")` | `CASE WHEN amount>=100 THEN '大口' ELSE '小口' END` |
+| ネストIF | `CASE WHEN ... THEN ... WHEN ... THEN ... ELSE ... END` |
+
+### 日付・期間集計
+
+```
+【Excel：月別集計をSUMIFSで実現】
+=SUMIFS(金額, 日付, ">="&月初, 日付, "<="&月末)
+
+【SQL：GROUP BYで一括取得】
+SELECT
+    strftime('%Y-%m', order_date) AS month,
+    SUM(amount) AS monthly_total
+FROM orders
+GROUP BY strftime('%Y-%m', order_date)
+ORDER BY month;
+```
+
+### 文字列操作
+
+| Excel関数 | SQL（SQLite） |
+|---|---|
+| `LEFT(A1,3)` | `SUBSTR(column, 1, 3)` |
+| `LEN(A1)` | `LENGTH(column)` |
+| `CONCATENATE(A1,B1)` | `column1 \|\| column2` |
+| `TRIM(A1)` | `TRIM(column)` |
+| `UPPER(A1)` | `UPPER(column)` |
+
+### 重複・ユニーク
+
+| Excel操作 | SQL |
+|---|---|
+| 重複の削除 | `SELECT DISTINCT column FROM table` |
+| 重複の検出 | `SELECT column, COUNT(*) FROM table GROUP BY column HAVING COUNT(*)>1` |
+
+### SQLの方が優れている点
+
+```
+【Excelの限界】
+・行数制限（約100万行）
+・ファイルが大きくなると重い
+・複数シート間の集計が複雑
+・VLOOKUPのネストは可読性が低い
+・同時編集の制約
+
+【SQLの利点】
+・数百万〜数億行でも処理可能
+・JOINで複数テーブルを簡潔に結合
+・GROUP BYで集計が一発
+・クエリを保存・再利用できる
+・複数人が同時にアクセス可能
+```
+
+### Excelの方が適している場面
+
+```
+・1回限りの簡易計算
+・視覚的なグラフ作成（その場で確認）
+・非エンジニアへの共有
+・手動での微調整が必要な作業
+```
+
+### ブロンズでの実践例
+
+```
+【想定シナリオ：売上管理】
+
+Excel での作業：
+1. 月別売上をSUMIFSで集計
+2. VLOOKUPで顧客名を取得
+3. ピボットテーブルで支店別集計
+4. 手動でグラフ作成
+
+SQL での置き換え：
+1. GROUP BY + SUM で月別集計
+2. JOIN で顧客テーブルを結合
+3. GROUP BY で支店別集計
+4. → Looker Studio で自動グラフ化（ゴールド以降）
+```
+
+---
+
 ## 付録：Excel書式設定の実現方法
 
 ### ブロンズで「できること」と「できないこと」
