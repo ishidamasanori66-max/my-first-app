@@ -143,7 +143,7 @@ Diamond        = デジタルトランスフォーメーション（本来のDX�
   → データの分布、相関、傾向の把握
   → 欠損値・外れ値の処理
 ・データ可視化（分析向け）
-  → matplotlib / seaborn（ブロンズの発展）
+  → matplotlib / seaborn（ブロンズで未習得の場合はここで導入）
   → Streamlit で分析ダッシュボード構築
 ・Google Colab / Jupyter の活用
   → ブロンズの環境を再活用
@@ -432,9 +432,11 @@ Diamond        = デジタルトランスフォーメーション（本来のDX�
 【ブロンズで習得済み → フル活用】
 Python                 ... ブロンズで習得、ダイヤモンドの主力言語に
 pandas                 ... データ前処理の中核
-matplotlib             ... データ可視化
 sqlite3 / SQL          ... データ抽出
 Google Colab           ... 実験環境
+
+【ダイヤモンドで本格導入】
+matplotlib / seaborn   ... データ可視化（ブロンズではオプション）
 
 【シルバー〜プラチナで習得済み → データソースとして活用】
 Supabase               ... 蓄積データの取得元
