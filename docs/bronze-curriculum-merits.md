@@ -742,5 +742,151 @@ Python + Pandas（入出力） + Pydantic（検証） + sqlite3（SQL処理） +
 
 ---
 
+## 付録：Excel書式設定の実現方法
+
+### ブロンズで「できること」と「できないこと」
+
+Excel集計では、セルに色をつけたり、枠線の太さを変えたり、文字を太字にしたりといった書式設定を行います。これらの機能は本カリキュラムの技術セットでどこまで対応できるでしょうか。
+
+```
+【ブロンズ本編（Python + sqlite3）】
+・データ取得・集計 → できる（SQLで実現）
+・VLOOKUP相当 → できる（JOINで実現）
+・ピボットテーブル相当 → できる（GROUP BYで実現）
+・書式設定（色・罫線・太字）→ できない
+
+【シルバー以降（Django + HTMX）】
+・HTML/CSSでの書式設定 → できる
+・条件付き書式 → できる（テンプレート + CSS）
+・グラフ表示 → できる（Looker Studio連携）
+```
+
+ブロンズ本編は「データ処理」に集中し、「見た目の装飾」はシルバー以降で段階的に実現する設計です。
+
+### オプション：openpyxl でExcel書式設定
+
+ただし、**openpyxl** ライブラリを使えば、ブロンズの技術セット（Python + sqlite3）のままExcel書式設定が可能です。
+
+#### openpyxl でできること
+
+```
+・Excelファイル(.xlsx)の生成
+・セル背景色
+・罫線（線種、太さ、色）
+・フォント（太字、色、サイズ）
+・数値フォーマット（カンマ区切り、通貨）
+・条件付き書式
+・セル結合
+・列幅・行高の調整
+```
+
+#### 実装例
+
+```python
+import sqlite3
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Border, Side
+
+# 1. SQLiteからデータ取得
+conn = sqlite3.connect('sales.db')
+cursor = conn.cursor()
+cursor.execute('''
+    SELECT branch, SUM(amount) as total, COUNT(*) as count
+    FROM orders
+    GROUP BY branch
+    ORDER BY total DESC
+''')
+rows = cursor.fetchall()
+
+# 2. Excelファイル作成
+wb = Workbook()
+ws = wb.active
+ws.title = "売上集計"
+
+# 3. スタイル定義
+header_font = Font(bold=True, color="FFFFFF")
+header_fill = PatternFill("solid", fgColor="4472C4")
+border = Border(
+    left=Side(style='thin'),
+    right=Side(style='thin'),
+    top=Side(style='thin'),
+    bottom=Side(style='thin')
+)
+achieved_fill = PatternFill("solid", fgColor="C6EFCE")  # 緑
+not_achieved_fill = PatternFill("solid", fgColor="FFC7CE")  # 赤
+
+# 4. ヘッダー行（青背景・白太字）
+headers = ["支店", "売上合計", "件数"]
+for col, header in enumerate(headers, 1):
+    cell = ws.cell(row=1, column=col, value=header)
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.border = border
+
+# 5. データ行（条件付き書式付き）
+for row_idx, (branch, total, count) in enumerate(rows, 2):
+    ws.cell(row=row_idx, column=1, value=branch).border = border
+
+    total_cell = ws.cell(row=row_idx, column=2, value=total)
+    total_cell.number_format = '#,##0"円"'
+    total_cell.border = border
+    # 条件付き書式：100万以上なら緑、未満なら赤
+    if total >= 1000000:
+        total_cell.fill = achieved_fill
+    else:
+        total_cell.fill = not_achieved_fill
+
+    ws.cell(row=row_idx, column=3, value=count).border = border
+
+# 6. 列幅調整
+ws.column_dimensions['A'].width = 15
+ws.column_dimensions['B'].width = 18
+ws.column_dimensions['C'].width = 10
+
+# 7. 保存
+wb.save('sales_report.xlsx')
+conn.close()
+
+print("sales_report.xlsx を出力しました")
+```
+
+#### 出力されるExcelファイルのイメージ
+
+```
+┌──────────┬────────────────┬────────┐
+│ 支店     │    売上合計     │  件数  │  ← 青背景・白太字
+├──────────┼────────────────┼────────┤
+│ 東京     │  1,250,000円   │   45   │  ← 緑背景（100万以上）
+├──────────┼────────────────┼────────┤
+│ 名古屋   │  1,100,000円   │   38   │  ← 緑背景
+├──────────┼────────────────┼────────┤
+│ 大阪     │    980,000円   │   32   │  ← 赤背景（100万未満）
+└──────────┴────────────────┴────────┘
+```
+
+#### ブロンズ・オプションとしての位置づけ
+
+```
+【本編】SQLでデータを取得・集計
+    ↓
+【オプション】openpyxlで書式付きExcel出力
+
+・Excel操作に慣れた人への橋渡し
+・「見慣れた形式」で出力できる安心感
+・印刷・配布用途に対応
+・シルバー（Django）に進まなくても完結可能
+```
+
+### 各レベルでの「見た目」対応まとめ
+
+| レベル | 技術 | 書式設定 |
+|---|---|---|
+| ブロンズ本編 | Python + sqlite3 | なし（データ処理のみ） |
+| ブロンズ・オプション | + openpyxl | Excel書式（色・罫線・太字） |
+| シルバー | Django + HTMX | HTML/CSS（Web画面） |
+| ゴールド | + Looker Studio | グラフ・ダッシュボード |
+
+---
+
 *本ドキュメントは技術選定の議論を経て作成されました。*
 *最終更新: 2026年2月*
