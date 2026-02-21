@@ -195,7 +195,7 @@ DB：Supabase PostgreSQL（一貫）
 | Railway | △ | 低 | ✗ | 学習・プロトタイプ |
 | Fly.io | ○ | 中 | ○ | 本番運用 |
 | Heroku | ✗ | 低 | ✗ | 情報重視の場合 |
-| Cloud Run | ○ | 高 | ○ | 大規模・GCP利用時 |
+| Cloud Run（Google） | ○ | 高 | ○ | 大規模運用 |
 
 ```
 【Render】$0〜 / $7月〜
@@ -219,7 +219,8 @@ DB：Supabase PostgreSQL（一貫）
 ・長年の実績
 ・アドオンエコシステムが充実
 
-【Cloud Run】従量制（無料枠あり）
+【Cloud Run（Google）】従量制（無料枠あり）
+・Google Cloud が提供するコンテナ実行サービス
 ・東京リージョン対応
 ・ゼロスケール（使わない時は課金なし）
 ・Dockerの知識が必要
@@ -238,7 +239,7 @@ Render または Railway を推奨
 → 設定がシンプル
 
 【本格運用（プラチナ〜）】
-Fly.io または Cloud Run を検討
+Fly.io または Cloud Run（Google）を検討
 → 東京リージョン対応
 → スケーラビリティ
 ```
@@ -256,7 +257,7 @@ Fly.io または Cloud Run を検討
 2. fly.toml を編集
 3. fly deploy
 
-【やや複雑】Cloud Run
+【やや複雑】Cloud Run（Google）
 1. Dockerfile を作成
 2. Cloud Build でビルド
 3. Cloud Run にデプロイ
