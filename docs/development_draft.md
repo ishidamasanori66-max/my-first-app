@@ -316,6 +316,174 @@ Phase 4: 使って改善
 
 ---
 
+## AppSheetのワークフロー機能：出張管理システムを例に
+
+### 検討事例：出張申請・承認・清算システム
+
+```
+【業務フロー】
+出張申請 → 上長承認 → 出張実施 → 清算申請 → 清算承認 → 完了
+```
+
+### AppSheetのワークフロー機能
+
+| 機能 | AppSheetでの実現 |
+|---|---|
+| ステータス管理 | ◎ 列で管理（申請中/承認済/却下等） |
+| 承認ボタン | ◎ Action ボタンで実装 |
+| 通知 | ◎ Automation で Email/プッシュ通知 |
+| 権限制御 | ○ User Role で制御 |
+| 条件分岐 | ○ 条件式で実装可能 |
+
+### データ構造の例
+
+```
+【データ構造（Google Sheets）】
+
+シート1: 出張申請
+├─ shinsei_id（申請ID）
+├─ shinseisha（申請者）
+├─ shutcho_saki（出張先）
+├─ shuppatsu_date / kitaku_date（出発日/帰着日）
+├─ mokuteki（目的）
+├─ gaisan_hiyo（概算費用）
+├─ status（申請中/承認済/却下/清算待ち/完了）
+└─ shounin_sha / shounin_date（承認者/承認日）
+
+シート2: 清算明細
+├─ meisai_id（明細ID）
+├─ shinsei_id（申請ID：リレーション）
+├─ himoku（費目：交通費/宿泊費/日当等）
+├─ kingaku（金額）
+├─ ryoshusho_image（領収書画像）
+└─ status
+```
+
+### AppSheet Automation での実装
+
+```
+【ワークフロー自動化】
+
+1. 申請時
+   → 上長にメール通知
+   → status = "shinsei_chu"
+
+2. 承認ボタン押下時
+   → status = "shounin_zumi"
+   → 申請者に通知
+
+3. 出張完了後、清算申請
+   → 明細追加画面を表示
+   → status = "seisan_machi"
+
+4. 清算承認
+   → status = "kanryo"
+   → 経理に通知
+```
+
+### AppSheetの限界
+
+| 要件 | 実現度 | 課題 |
+|---|---|---|
+| **単純な承認フロー** | ◎ | 問題なし |
+| **多段階承認**（係長→課長→部長） | △ | 実装は可能だが複雑になる |
+| **並列承認**（AとB両方の承認が必要） | △ | 条件式が複雑化 |
+| **代理承認** | △ | ユーザー管理が煩雑 |
+| **差し戻し→再申請** | ○ | ステータス遷移で対応 |
+| **監査ログ** | △ | 別シートで手動記録が必要 |
+| **外部連携**（経費精算システム等） | × | API連携は困難 |
+
+### 判断基準：AppSheet vs Django
+
+```
+【AppSheetで十分なケース】
+・承認者が1〜2段階
+・ユーザー数が少ない（〜50人程度）
+・社内利用のみ
+・複雑な条件分岐がない
+・外部システム連携が不要
+
+【Djangoが必要なケース】
+・承認フローが複雑（多段階、並列、条件分岐）
+・監査ログが必須
+・外部システムとの連携が必要
+・カスタマイズ要件が多い
+・将来的な拡張が見込まれる
+```
+
+### シルバーカリキュラムとの接続
+
+```
+【提案：2段階アプローチ】
+
+Phase 1: AppSheetでプロトタイプ
+・基本的なワークフローを素早く構築
+・現場で使ってもらい、要件を洗い出す
+・「こういう機能も欲しい」を収集
+
+Phase 2: Djangoで本実装（必要に応じて）
+・AppSheetの限界に達したら移行
+・または最初からDjangoで良い場合もある
+```
+
+### Djangoでのワークフロー実装例
+
+```python
+# シンプルなステータス遷移
+class ShutchoShinsei(models.Model):
+    STATUS_CHOICES = [
+        ('draft', '下書き'),
+        ('pending', '申請中'),
+        ('approved', '承認済'),
+        ('rejected', '却下'),
+        ('settlement', '清算待ち'),
+        ('completed', '完了'),
+    ]
+
+    shinseisha = models.ForeignKey(User, on_delete=models.CASCADE)
+    shutcho_saki = models.CharField(max_length=100)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    shounin_sha = models.ForeignKey(User, null=True, blank=True,
+                                     on_delete=models.SET_NULL,
+                                     related_name='shounin_set')
+    shounin_date = models.DateTimeField(null=True, blank=True)
+```
+
+```python
+# 承認アクション
+def shounin(request, shinsei_id):
+    shinsei = ShutchoShinsei.objects.get(id=shinsei_id)
+    shinsei.status = 'approved'
+    shinsei.shounin_sha = request.user
+    shinsei.shounin_date = timezone.now()
+    shinsei.save()
+
+    # 通知送信
+    send_notification(shinsei.shinseisha, "出張申請が承認されました")
+
+    return redirect('shinsei_list')
+```
+
+### ワークフロー機能の比較まとめ
+
+| 観点 | AppSheet | Django |
+|---|---|---|
+| 開発速度 | ◎ 数時間 | ○ 数日 |
+| 単純ワークフロー | ◎ | ◎ |
+| 複雑ワークフロー | △ | ◎ |
+| カスタマイズ | △ | ◎ |
+| 外部連携 | × | ◎ |
+| 推奨用途 | プロトタイプ/小規模 | 本格運用 |
+
+```
+【結論】
+・出張管理のような「単純な承認フロー」はAppSheetで十分実現可能
+・ただし、複雑化する見込みがあるなら、最初からDjango + HTMXで作る方が手戻りが少ない
+・AppSheetで要件を洗い出し → Djangoで本実装 という2段階も有効
+```
+
+---
+
 ## 命名案の候補
 
 ```
