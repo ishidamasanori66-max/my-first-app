@@ -937,6 +937,161 @@ Phase 5: 利用者教育
 
 ---
 
+## Django + Supabase 設計の一貫性
+
+### 統一アーキテクチャ
+
+```
+【原則】
+「Supabaseは便利なインフラ、頭脳はDjango」
+
+・すべてのクライアントはDjangoを経由してデータにアクセスする
+・Supabaseに直接アクセスしない
+・この原則はシルバーからダイヤモンドまで一貫して変わらない
+```
+
+### 役割分担
+
+```
+【Django の役割】
+├─ アプリケーションロジック（ビジネスルール）
+├─ ORM（モデル定義、マイグレーション）
+├─ ビュー・テンプレート（HTMX）
+├─ REST API（モバイル向け、DRF）
+├─ 管理画面（Django Admin）
+└─ 認証・認可（django.auth）
+
+【Supabase の役割】
+├─ PostgreSQLホスティング（本番DB）
+├─ ファイルストレージ（画像、添付ファイル）
+└─ バックアップ・スケーリング
+
+【Supabaseの使わない機能】
+├─ Supabase Auth → Django認証に統一
+├─ PostgREST API → Django経由でアクセス
+├─ Edge Functions → Djangoで処理
+└─ Realtime → 必要時はDjango Channels
+```
+
+### カリキュラム全体を通じた一貫性
+
+```
+ブロンズ ：（Django/Supabase未使用）
+    ↓
+シルバー ：Django + Supabase + HTMX
+    ↓
+ゴールド ：Django + Supabase + HTMX（より複雑な業務）
+    ↓
+プラチナ ：Django + Supabase + HTMX + モバイル対応
+    ↓
+ダイヤモンド：Django + Supabase + HTMX（組織横断）
+
+→ 技術スタックは変わらず、扱う業務の複雑さが上がる
+→ シルバーで学んだことがダイヤモンドまで活きる
+```
+
+### モバイル対応時のアーキテクチャ
+
+```
+┌─────────────────────────────────────────┐
+│         クライアント層（選択）           │
+│                                         │
+│  ・HTMX（Web）                          │
+│  ・PWA（Web + オフライン）              │
+│  ・Capacitor（WebViewラップ）           │
+│  ・React Native（ネイティブUI）         │
+│  ・Flutter（ネイティブUI）              │
+│                                         │
+└─────────────────┬───────────────────────┘
+                  │ HTTP（HTMX or REST API）
+                  ▼
+┌─────────────────────────────────────────┐
+│              Django                      │
+│  ・ビジネスロジック                      │
+│  ・認証・認可                            │
+│  ・ORM（データアクセス）                 │
+│  ・API提供（HTMX用 or DRF）              │
+└─────────────────┬───────────────────────┘
+                  │ DB接続
+                  ▼
+┌─────────────────────────────────────────┐
+│             Supabase                     │
+│  ・PostgreSQL（データ）                  │
+│  ・Storage（ファイル）                   │
+└─────────────────────────────────────────┘
+
+→ どのクライアントを選んでもDjango + Supabaseの役割は同じ
+```
+
+### 設計の「誘惑」と対策
+
+```
+【誘惑の正体】
+React NativeやFlutterには「Supabase公式SDK」がある。
+SDKを使えばDjangoを通さずにSupabaseの機能を直接呼べる。
+これは作り手の「手間を省きたい」という誘惑であり、
+アプリのパフォーマンスの問題ではない。
+
+【具体的な誘惑】
+
+誘惑①：認証
+  Django経由 → 自前でログインAPI作成、トークン管理
+  Supabase直接 → supabase.auth.signIn() で3行で完了
+  「Djangoで認証API書くの面倒…」
+
+誘惑②：ファイルアップロード
+  Django経由 → モバイル → Django API → Supabase Storage
+  Supabase直接 → supabase.storage.upload() で直接アップロード
+  「なぜわざわざDjangoを経由するのか…」
+
+誘惑③：リアルタイム通知
+  Django経由 → Django Channels等のWebSocket実装が必要
+  Supabase直接 → supabase.from('table').on('INSERT', callback)
+  「数行でリアルタイム機能が使えるのに…」
+
+誘惑④：単純なCRUD
+  Django経由 → View, Serializer, URL設定…
+  Supabase直接 → supabase.from('shohin').select('*')
+  「ただの一覧取得にDjangoのコード書く必要ある？…」
+
+【なぜ誘惑に負けてはいけないか】
+・ロジックがDjangoとモバイルアプリに分散する
+・「この処理はどこにある？」が分からなくなる
+・Webとモバイルで同じ処理を二重実装することになる
+・テストが困難になる
+・AIにコードを読ませても全体像が掴めなくなる
+
+【パフォーマンスは理由にならない】
+・Django経由は1ホップ増えるが、ミリ秒単位の差
+・中小企業の業務アプリでは体感差ゼロ
+・パフォーマンスが問題になるのは数万人同時アクセス等
+・「手間」対「設計の一貫性」のトレードオフ
+・一貫性を守る方が長期的な保守コストは下がる
+
+【カリキュラムでの対策】
+・プラチナでモバイル対応を教える際、最初にこの「誘惑」を説明する
+・「なぜDjango経由にするのか」の理由を理解させる
+・設計原則（関心の分離）との接続を示す
+```
+
+### PWA / Capacitor が推奨される理由
+
+```
+【モバイル対応の推奨順】
+第1選択：PWA           → 役割維持、追加学習最小
+第2選択：Capacitor     → 役割維持、WebViewラップ
+第3選択：Flutter       → 役割維持可能だが誘惑あり
+第4選択：React Native  → 役割維持可能だが誘惑あり
+
+【PWA / Capacitorの優位性】
+・HTMLをDjangoから受け取る構造のため、
+  Supabaseに直接アクセスする手段がそもそもない
+・「誘惑」自体が発生しない
+・学習コストが最小
+```
+
+---
+
 ## 検討事項・未決定事項
 
 - [ ] 手法の正式名称を決定する
@@ -952,6 +1107,8 @@ Phase 5: 利用者教育
 - [ ] ブロンズカリキュラムへの「簡易ER図」組み込み
 - [ ] ブロンズ向けER図テンプレート（draw.io、Googleスライド等）
 - [ ] 現場に既存資料がある場合の活用ガイドライン
+- [ ] プラチナのモバイル対応：PWA / Capacitor / Flutter / React Native の選定基準
+- [ ] Django REST Framework（DRF）のカリキュラムへの組み込みタイミング
 
 ---
 
